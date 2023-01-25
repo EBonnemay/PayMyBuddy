@@ -28,26 +28,39 @@ public class PaymybuddyApplication implements CommandLineRunner {
 	}
 	@Override
 	public void run(String...args) throws Exception{
-		Iterable<User> users = userService.getUsers();
+		/*Iterable<User> users = userService.getUsers();
 		users.forEach(user -> System.out.println(user.getEmail()));
+
+		Optional<User> optUser = userService.getUserById(1);
+		User userId1 = optUser.get();
+		System.out.println(userId1.getFirstName());
+
+		userId1.getBankAccounts().forEach(
+				bankAccount -> System.out.println(bankAccount.getNumberOfBankAccount()));
+
+		userId1.getConnections().forEach(
+				user ->System.out.println(user.getFirstName()));*/
 
 		Iterable<BankAccount> bankAccounts = bankAccountService.getBankAccounts();
 		bankAccounts.forEach(bankAccount -> System.out.println(bankAccount.getAccountBalance()));
 
-		Iterable<Transaction> transactions = transactionService.getTransactions();
-		transactions.forEach(transaction -> System.out.println(transaction.getDateTime()));
 
-		Optional<BankAccount> optBankAccount = bankAccountService.getBankAccountById(1);
-		BankAccount bankAccountId1 = optBankAccount.get();
-		System.out.println(bankAccountId1.getAccountBalance());
+		Optional<BankAccount> optBankAccount = bankAccountService.getBankAccountById(2);
+		BankAccount bankAccountId2 = optBankAccount.get();
+		System.out.println(bankAccountId2.getAccountBalance());
+
+		bankAccountId2.getMyCreditTransactionsAccounts().forEach(
+				account -> System.out.println("this count gave me money "+account.getBankAccountId()
+		));
+
+		Iterable<Transaction> transactions = transactionService.getTransactions();
+		transactions.forEach(transaction -> System.out.println(transaction.getStatusOfTransaction()));
 
 		Optional<Transaction> optTransaction = transactionService.getTransactionById(1);
 		Transaction transactionId1 = optTransaction.get();
 		System.out.println(transactionId1.getAmountOfTransaction());
 
-		Optional<User> optUser = userService.getUserById(1);
-		User userId1 = optUser.get();
-		System.out.println(userId1.getFirstName());
+
 	}
 
 }

@@ -10,8 +10,8 @@ import java.util.Date;
 public class Transaction {
 //revoir primary key d'une table de liaison dans sprintBoot JPA
     @Id
-    @Column(name = "id")
-    private int transactionId;
+   @Column(name = "id")
+   private int transactionId;
 //aurais du mettre credit_account_id
     //credit_account et debit_account sont des clés étrangères
     @Column(name = "credit_account")
