@@ -14,11 +14,11 @@ public class Transaction {
    private int transactionId;
 //aurais du mettre credit_account_id
     //credit_account et debit_account sont des clés étrangères
-    @Column(name = "credit_account")
-    private int creditAccount;
+    @Column(name = "credited_account")
+    private int creditedAccount_Id;
 
-    @Column(name = "debit_account")
-    private int debitAccount;
+    @Column(name = "debited_account")
+    private int debitedAccount_Id;
 
     @Column(name = "amount_of_transaction")
     private float amountOfTransaction;

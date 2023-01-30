@@ -18,4 +18,14 @@ public class UserService {
     public Optional<User> getUserById(Integer id){
         return userRepository.findById(id);
     }
+    public User addUser(User user){
+        return userRepository.save(user);
+    }
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+    public void deleteUserById(int Id){
+        userRepository.deleteById(Id);
+
+    }
 }

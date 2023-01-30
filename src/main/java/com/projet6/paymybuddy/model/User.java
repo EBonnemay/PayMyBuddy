@@ -2,11 +2,14 @@ package com.projet6.paymybuddy.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "user" )
 public class User {
@@ -49,14 +52,36 @@ public class User {
    @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.EAGER//quand on recupere user, tous les ba viennent en même temps
     )
 
     @JoinColumn(name = "user_id")
     private List<BankAccount> bankAccounts = new ArrayList<>();
 
 
-    @ManyToMany(cascade = {
+
+/*
+    @OneToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    },
+            fetch = FetchType.EAGER
+    )
+
+    @JoinTable(
+            name = "connection",
+            joinColumns = @JoinColumn(name = "user2_id", referencedColumnName = "id"),//creates 1 FK in connection, pointing to id in User.
+            inverseJoinColumns = @JoinColumn(name = "user1_id", referencedColumnName = "id")
+
+    )
+    private List<User> usersConnectedWithMe = new ArrayList<>();
+
+
+
+
+
+
+    @OneToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     },
@@ -64,25 +89,30 @@ public class User {
     )
     @JoinTable(
             name = "connection",
-            joinColumns = @JoinColumn(name = "user1_id", referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "user1_id", referencedColumnName = "id"),//creates 1 FK in connection, pointing to id in User.
             inverseJoinColumns = @JoinColumn(name = "user2_id", referencedColumnName = "id")
+
     )
-    private List<User> connections = new ArrayList<>();
-    /*
-   @OneToMany(
-           cascade = CascadeType.ALL,
-           orphanRemoval = true,
-           fetch = FetchType.EAGER
-   )
-   @JoinColumn(name = "user1_id")
-   @OneToMany(
-           cascade = CascadeType.ALL,
-           orphanRemoval = true,
-           fetch = FetchType.EAGER
-   )
-
-   private List<Connection> connections = new ArrayList<>();*/
+    private List<User> usersIconnectedTo = new ArrayList<>();
 
 
 
+    public void addFriend(User user) {
+        friends.add(user);
+        user.getFriends().add(this);
+    }
+
+    public void removeFriend(User user) {
+        usersIconnectedTo.remove(user);
+        user.setUsersIconnectedTo(null);
+    }
+// faire une seule liste d'amis?
+public void addBankAccount(BankAccount bankAccount) {
+    bankAccounts.add(bankAccount);
+    bankAccounts.setBankAccounts(bankAccounts)
+
+    public void removeFriend(User user) {
+        usersIconnectedTo.remove(user);
+        user.setUsersIconnectedTo(null);
+    }*/
 }

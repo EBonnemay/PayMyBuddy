@@ -19,6 +19,8 @@ public class TransactionService {
     public Optional<Transaction> getTransactionById(Integer id){
         return transactionRepository.findById(id);
     }
-
+    public Transaction addTransaction(Transaction transaction){
+        return transactionRepository.save(transaction);
+    }
 
 }

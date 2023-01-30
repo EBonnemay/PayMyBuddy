@@ -17,10 +17,10 @@ public class BankAccount {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id")
-        private int bankAccountId;
+        private int id;
 
-        @Column(name = "number_of_account")
-        private String numberOfBankAccount;
+        @Column(name = "iban")
+        private String iban;
 
         @Column(name = "account_balance")
         private float accountBalance;
@@ -34,10 +34,10 @@ public class BankAccount {
         //
         @JoinTable(
                 name = "transaction",
-                joinColumns = @JoinColumn(name = "credit_account", referencedColumnName = "id"),
-                inverseJoinColumns = @JoinColumn(name = "debit_account", referencedColumnName = "id")
+                joinColumns = @JoinColumn(name = "credited_account", referencedColumnName = "id"),
+                inverseJoinColumns = @JoinColumn(name = "debited_account", referencedColumnName = "id")
         )
-        private List<BankAccount> myCreditTransactionsAccounts = new ArrayList<>();
+        private List<BankAccount> bankAccountsOfFriendsGivingMoneyToMe = new ArrayList<>();
         //pas de clé étrangère ici? la "user_id" mentionnée dans USER avec @join column + liste de bankAccounts
         @ManyToMany(cascade = {
                 CascadeType.PERSIST,
@@ -47,8 +47,15 @@ public class BankAccount {
         )
         @JoinTable(
                 name = "transaction",
-                joinColumns = @JoinColumn(name = "debit_account", referencedColumnName = "id"),
-                inverseJoinColumns = @JoinColumn(name = "credit_account", referencedColumnName = "id")
+                joinColumns = @JoinColumn(name = "debited_account", referencedColumnName = "id"),
+                inverseJoinColumns = @JoinColumn(name = "credited_account", referencedColumnName = "id")
         )
-        private List<BankAccount> myDebitTransactionsAccounts = new ArrayList<>();
+        private List<BankAccount> bankAccountsOfFriendsIGaveMoneyTo = new ArrayList<>();
+
+        @ManyToOne(
+                cascade = CascadeType.ALL
+        )
+
+        @JoinColumn(name = "user_id")
+        private User owner;
 }
