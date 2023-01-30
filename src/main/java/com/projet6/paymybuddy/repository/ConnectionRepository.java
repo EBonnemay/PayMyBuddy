@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConnectionRepository extends CrudRepository<Connection, Integer> {
     @Query(value = "SELECT id FROM connection WHERE user1_id = :id OR user2_id = :id", nativeQuery = true)
-    public Iterable<Connection> findConnectionsForOneUser(@Param("id") int userRequested);
+    Iterable<Connection> findConnectionsForOneUser(@Param("id") int userRequested);
 }

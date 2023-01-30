@@ -36,6 +36,7 @@ public class PaymybuddyApplication implements CommandLineRunner {
 	}
 	@Override
 	public void run(String...args) throws Exception{
+
 		/** print the email of every user*/
 		Iterable<User> users = userService.getUsers();
 		users.forEach(user -> System.out.println(user.getEmail()));//print email de chaque objet
