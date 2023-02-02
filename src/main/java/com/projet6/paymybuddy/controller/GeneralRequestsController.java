@@ -99,7 +99,8 @@ public void printAmountOfmoneyOnBankAccountWithId2(){
     /**given I own bankaccount with id 2, give me the firstName of persons who gave me money, and the iban and id of the bankaccount they used*/
 
        Optional<BankAccount> optBankAccount = bankAccountService.getBankAccountById(2);
-       BankAccount bankAccountId2 = optBankAccount.get();bankAccountId2.getBankAccountsOfFriendsGivingMoneyToMe().
+       BankAccount bankAccountId2 = optBankAccount.get();
+       bankAccountId2.getBankAccountsOfFriendsGivingMoneyToMe().
 
     forEach(
             account ->System.out.println("this count gave me money "+account.getOwner().
@@ -157,12 +158,12 @@ public void printAmountOfmoneyOnBankAccountWithId2(){
     public void listOfConnectionIdsForUser4() {
 
 
-    /**
-     * print the list of connection ids for user 4
-     */
+        /**
+         * print the list of connection ids for user 4
+         */
 
-    Iterable<Connection> connections = connectionService.getConnectionsForOneUser(4);
-		connections.forEach(connection ->System.out.println(connection.getConnectionId()));
+        //Iterable<Connection> connections = connectionService.getConnectionsForOneUser(4);
+        //	connections.forEach(connection ->System.out.println(connection.getConnectionId()));
+        // }
     }
-
 }

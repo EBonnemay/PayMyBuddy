@@ -1,6 +1,8 @@
 package com.projet6.paymybuddy.controller;
 
+import com.projet6.paymybuddy.model.Connection;
 import com.projet6.paymybuddy.repository.ConnectionRepository;
+import com.projet6.paymybuddy.service.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,12 +17,15 @@ public class LoginController {
 
     @Autowired
     ConnectionRepository connectionRepository;
+    @Autowired
+    ConnectionService connectionService;
 
     @GetMapping("/personalPage")//url sur lequel répond la méthode
     public String goHome(Model model){
         //final UserDetails currentUserDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
 
-        model.addAttribute("friends", connectionRepository.findConnectionsForOneUser(1));
+
+        model.addAttribute("friends", connectionService.getNamesOfFriends(3));
         return "personalPage";
     }
 
