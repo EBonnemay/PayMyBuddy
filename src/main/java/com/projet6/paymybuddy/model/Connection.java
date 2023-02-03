@@ -13,5 +13,19 @@ public class Connection {
         @Column(name = "id")
         private int connectionId;
 
+        @ManyToOne(
+                cascade = CascadeType.ALL,
+                fetch = FetchType.EAGER
+        )
+        @JoinColumn(name = "author")
+        private User author;
+
+        @ManyToOne(
+                cascade = CascadeType.ALL,
+                fetch = FetchType.EAGER
+
+        )
+        @JoinColumn(name = "target")
+        private User target;
 
 }

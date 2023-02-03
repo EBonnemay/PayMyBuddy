@@ -25,7 +25,7 @@ public class BankAccount {
         @Column(name = "account_balance")
         private float accountBalance;
 
-        @ManyToMany(cascade = {
+       /* @ManyToMany(cascade = {
                 CascadeType.PERSIST,
                 CascadeType.MERGE
         },
@@ -38,8 +38,24 @@ public class BankAccount {
                 inverseJoinColumns = @JoinColumn(name = "debited_account", referencedColumnName = "id")
         )
         private List<BankAccount> bankAccountsOfFriendsGivingMoneyToMe = new ArrayList<>();
-        //pas de clé étrangère ici? la "user_id" mentionnée dans USER avec @join column + liste de bankAccounts
-        @ManyToMany(cascade = {
+*/
+        @OneToMany(
+                fetch = FetchType.EAGER,
+                mappedBy = "debitedAccount",
+                cascade = CascadeType.ALL,
+                orphanRemoval = true
+        )
+        private List<Transaction> transactionsAsDebitedAccount = new ArrayList<>();
+
+
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            mappedBy = "creditedAccount",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Transaction> transactionsAsCreditedAccount = new ArrayList<>();//pas de clé étrangère ici? la "user_id" mentionnée dans USER avec @join column + liste de bankAccounts
+       /* @ManyToMany(cascade = {
                 CascadeType.PERSIST,
                 CascadeType.MERGE
         },
@@ -51,11 +67,14 @@ public class BankAccount {
                 inverseJoinColumns = @JoinColumn(name = "credited_account", referencedColumnName = "id")
         )
         private List<BankAccount> bankAccountsOfFriendsIGaveMoneyTo = new ArrayList<>();
-
+*/
         @ManyToOne(
-                cascade = CascadeType.ALL
+                cascade = CascadeType.ALL,
+                fetch = FetchType.EAGER
         )
 
         @JoinColumn(name = "user_id")
-        private User owner;
+        private User user;
 }
+//means that my bankAccount entity has a foreign key column named user_id_email referring
+//to the primary attribute id_email of my User Entity

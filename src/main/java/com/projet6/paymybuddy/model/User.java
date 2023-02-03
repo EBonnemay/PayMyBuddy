@@ -17,7 +17,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int userId;
+    private int id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -50,13 +50,24 @@ public class User {
     private Boolean connected;
 
    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER//quand on recupere user, tous les ba viennent en même temps
+           fetch = FetchType.EAGER,
+           mappedBy = "user",
+           cascade = CascadeType.ALL,
+            orphanRemoval = true
+           // fetch = FetchType.EAGER//quand on recupere user, tous les ba viennent en même temps
     )
 
-    @JoinColumn(name = "user_id")
+    //@JoinColumn(name = "user_id_email")
     private List<BankAccount> bankAccounts = new ArrayList<>();
+
+   public void addBankAccount(BankAccount bankAccount){
+       bankAccounts.add(bankAccount);
+       bankAccount.setUser(this);
+   }
+   public void removeBankAccount(BankAccount bankAccount){
+       bankAccounts.add(bankAccount);
+       bankAccount.setUser(this);
+   }
 
 
 
@@ -115,4 +126,18 @@ public void addBankAccount(BankAccount bankAccount) {
         usersIconnectedTo.remove(user);
         user.setUsersIconnectedTo(null);
     }*/
+@OneToMany(
+        fetch = FetchType.EAGER,
+        mappedBy = "author",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+)
+private List<Connection> connectionsAsAuthor = new ArrayList<>();
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            mappedBy = "target",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Connection> connectionsAsTarget = new ArrayList<>();
 }

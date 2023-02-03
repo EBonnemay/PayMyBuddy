@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @Autowired
-    ConnectionRepository connectionRepository;
-    @Autowired
     ConnectionService connectionService;
 
     @GetMapping("/personalPage")//url sur lequel répond la méthode
@@ -25,7 +23,7 @@ public class LoginController {
         //final UserDetails currentUserDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
 
 
-        model.addAttribute("friends", connectionService.getNamesOfFriends(3));
+        model.addAttribute("friends", connectionService.getNamesOfFriends());
         return "personalPage";
     }
 

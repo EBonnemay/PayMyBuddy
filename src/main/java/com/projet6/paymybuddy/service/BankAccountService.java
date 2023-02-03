@@ -20,6 +20,7 @@ public class BankAccountService {
     public Optional<BankAccount> getBankAccountById(Integer id){
         return bankAccountRepository.findById(id);
     }
+    //public Optional<BankAccount> getPrincipalBankAccountByEmail()
 
     public BankAccount addBankAccount(BankAccount bankAccount){return bankAccountRepository.save(bankAccount);}
     public void deleteBankAccount(BankAccount bankaccount){bankAccountRepository.delete(bankaccount);}

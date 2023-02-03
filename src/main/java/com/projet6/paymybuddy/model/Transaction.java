@@ -3,7 +3,10 @@ package com.projet6.paymybuddy.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "transaction" )
@@ -14,11 +17,11 @@ public class Transaction {
    private int transactionId;
 //aurais du mettre credit_account_id
     //credit_account et debit_account sont des clés étrangères
-    @Column(name = "credited_account")
-    private int creditedAccount_Id;
+    //@Column(name = "credited_account")
+    //private int creditedAccount_Id;
 
-    @Column(name = "debited_account")
-    private int debitedAccount_Id;
+   // @Column(name = "debited_account")
+   // private int debitedAccount_Id;
 
     @Column(name = "amount_of_transaction")
     private float amountOfTransaction;
@@ -28,6 +31,22 @@ public class Transaction {
 
     @Column(name = "transaction_completed")
     private Boolean statusOfTransaction;
+
+    @ManyToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "debited_account")
+    private BankAccount debitedAccount;
+    //means that my transaction entity has a foreign key column named debited_account
+    //referring to the primary k
+    @ManyToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "credited_account")
+    private BankAccount creditedAccount;
+
 
 
 

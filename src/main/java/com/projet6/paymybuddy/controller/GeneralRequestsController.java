@@ -44,17 +44,17 @@ public class GeneralRequestsController {
 
     public void printNameOfUserWithId1() {
         /**print the name of the User with id 1*/
-        Optional<User> optUser = userService.getUserById(1);//optUser = objet 1 potentiel
-        User firstUser = optUser.get(); //firstUser
+        User user = userService.getUserById(1);//optUser = objet 1 potentiel
+        //User firstUser = optUser.get(); //firstUser
 
-        System.out.println(firstUser.getFirstName());
+        System.out.println(user.getFirstName());
     }
 
     public void printIbanOfUserWithId1() {
         /**print the numbers (iban) of user with id 1 - check later if can do the same from bankaccount entity*/
-        Optional<User> optUser = userService.getUserById(1);//optUser = objet 1 potentiel
-        User firstUser = optUser.get();
-        firstUser.getBankAccounts().forEach(
+        User user = userService.getUserById(1);//optUser = objet 1 potentiel
+        //User firstUser = optUser.get();
+        user.getBankAccounts().forEach(
                 bankAccount -> System.out.println(bankAccount.getIban()));
     }
 
@@ -86,43 +86,46 @@ public class GeneralRequestsController {
         Iterable<BankAccount> bankAccounts = bankAccountService.getBankAccounts();
         bankAccounts.forEach(bankAccount -> System.out.println(bankAccount.getAccountBalance()));
     }
-public void printAmountOfmoneyOnBankAccountWithId2(){
-    /**
-     * print the amount of money on bankaccount with id 2
-     */
 
-    Optional<BankAccount> optBankAccount = bankAccountService.getBankAccountById(2);
-    BankAccount bankAccountId2 = optBankAccount.get();
-		System.out.println(bankAccountId2.getAccountBalance());
-}
-   public void firstNameAndIbanAndBankAccountIdOfPersonsWhoGAveMoneyToId2(){
-    /**given I own bankaccount with id 2, give me the firstName of persons who gave me money, and the iban and id of the bankaccount they used*/
-
-       Optional<BankAccount> optBankAccount = bankAccountService.getBankAccountById(2);
-       BankAccount bankAccountId2 = optBankAccount.get();
-       bankAccountId2.getBankAccountsOfFriendsGivingMoneyToMe().
-
-    forEach(
-            account ->System.out.println("this count gave me money "+account.getOwner().
-
-    getFirstName()+" from his/her count with iban "+account.getIban()+" and id "+account.getId()));
-}
-    public void printStatusOfAllTransactions(){
+    public void printAmountOfmoneyOnBankAccountWithId2() {
         /**
-     * print the status of all transactions
-     */
-    Iterable<Transaction> transactions = transactionService.getTransactions();
-		transactions.forEach(transaction ->System.out.println(transaction.getStatusOfTransaction()));
-}
-    public void printAmountOfTransactionWithId1(){
+         * print the amount of money on bankaccount with id 2
+         */
+
+        Optional<BankAccount> optBankAccount = bankAccountService.getBankAccountById(2);
+        BankAccount bankAccountId2 = optBankAccount.get();
+        System.out.println(bankAccountId2.getAccountBalance());
+    }
+
+    /* public void firstNameAndIbanAndBankAccountIdOfPersonsWhoGAveMoneyToId2(){
+      given I own bankaccount with id 2, give me the firstName of persons who gave me money, and the iban and id of the bankaccount they used
+
+         Optional<BankAccount> optBankAccount = bankAccountService.getBankAccountById(2);
+         BankAccount bankAccountId2 = optBankAccount.get();
+         bankAccountId2.getBankAccountsOfFriendsGivingMoneyToMe().
+
+      forEach(
+              account ->System.out.println("this count gave me money "+account.getOwner().
+
+      getFirstName()+" from his/her count with iban "+account.getIban()+" and id "+account.getId()));
+  }
+      public void printStatusOfAllTransactions(){
+          /**
+       * print the status of all transactions
+
+      Iterable<Transaction> transactions = transactionService.getTransactions();
+          transactions.forEach(transaction ->System.out.println(transaction.getStatusOfTransaction()));
+  }*/
+    public void printAmountOfTransactionWithId1() {
 
         /**
-     * print amount of transaction with id 1
-     */
-    Optional<Transaction> optTransaction = transactionService.getTransactionById(1);
-    Transaction transactionId1 = optTransaction.get();
-		System.out.println(transactionId1.getAmountOfTransaction());
-}
+         * print amount of transaction with id 1
+         */
+        Optional<Transaction> optTransaction = transactionService.getTransactionById(1);
+        Transaction transactionId1 = optTransaction.get();
+        System.out.println(transactionId1.getAmountOfTransaction());
+    }
+
     public void printFirstNameOfOwnerodDebitedCOuntOdTransactionWithId1() {
 
 
@@ -131,10 +134,10 @@ public void printAmountOfmoneyOnBankAccountWithId2(){
          */
         Optional<Transaction> optTransaction = transactionService.getTransactionById(1);
         Transaction transactionId1 = optTransaction.get();
-        int giverAccountId = transactionId1.getDebitedAccount_Id();
+        int giverAccountId = transactionId1.getDebitedAccount().getId();
         Optional<BankAccount> optBank = bankAccountService.getBankAccountById(giverAccountId);//je pourrais aussi faire un lien direct transaction user.
         BankAccount giverAccount = optBank.get();
-        System.out.println("giver of first transaction is " + giverAccount.getOwner().
+        System.out.println("giver of first transaction is " + giverAccount.getUser().
 
                 getFirstName());
     }
@@ -165,5 +168,6 @@ public void printAmountOfmoneyOnBankAccountWithId2(){
         //Iterable<Connection> connections = connectionService.getConnectionsForOneUser(4);
         //	connections.forEach(connection ->System.out.println(connection.getConnectionId()));
         // }
+
     }
 }

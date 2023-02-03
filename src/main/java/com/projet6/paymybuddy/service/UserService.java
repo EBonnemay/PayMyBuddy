@@ -15,9 +15,12 @@ public class UserService {
     public Iterable<User> getUsers(){
         return userRepository.findAll();
     }
-    public Optional<User> getUserById(Integer id){
-        return userRepository.findById(id);
+    public User getUserById(int id){
+        Optional<User> optUser = userRepository.findById(id);
+        User user = optUser.get();
+        return user;
     }
+
     public User addUser(User user){
         return userRepository.save(user);
     }
