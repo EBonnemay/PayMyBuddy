@@ -41,21 +41,34 @@ public class ConnectionService {
         int id = user.getId();
         return getFriendsIdsForOneUserById(id);
     }
-    //récupérer l'id de l'utilisateur connecté et injecter en param ICI
-    //récupérer utilisateur connecté couramment
-    public Iterable<String> getNamesOfFriends() {
+    public Iterable<User> getFriendsUsersForOnePrincipalUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
-        List<String> listOfFriends = new ArrayList();
+        List<User> listOfFriends = new ArrayList();
+        Iterable<Integer> listOfIds = getFriendsIdsForOneUserByEmail(email);
+        for(Integer id : listOfIds) {
+            Optional<User> optUser = userRepository.findById(id);
+            User user = optUser.get();
+            listOfFriends.add(user);
+        }
+        return listOfFriends;
+    }
+    //récupérer l'id de l'utilisateur connecté et injecter en param ICI
+    //récupérer utilisateur connecté couramment
+    public Iterable<String> getNamesOfFriendsForPrincipalUSer() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        List<String> listOfFriendsNames = new ArrayList();
 //>>
         Iterable<Integer> listOfIds = getFriendsIdsForOneUserByEmail(email);
         for(Integer id : listOfIds){
             Optional<User> optUser = userRepository.findById(id);
             User user = optUser.get();
-            listOfFriends.add(user.getFirstName() +" "+ user.getLastName());
+            listOfFriendsNames.add(user.getFirstName() +" "+ user.getLastName());
         }
-        return listOfFriends;
+        return listOfFriendsNames;
     }
 
     }

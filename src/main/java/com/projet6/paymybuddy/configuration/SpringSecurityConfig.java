@@ -37,7 +37,7 @@ public class SpringSecurityConfig  {
                 .formLogin()//formulaire spring security par défaut
                     .loginPage("/login")
                     .permitAll()
-                    .defaultSuccessUrl("/personalPage")
+                    .defaultSuccessUrl("/home")
                     .and()
                 .logout()
                     .invalidateHttpSession(true)
