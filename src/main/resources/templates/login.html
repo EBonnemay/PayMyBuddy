@@ -7,7 +7,7 @@
 <h1>Login page</h1>
 <p th:if="${loginError}" class="error">Wrong user or password</p>
 <form th:action="@{/login}" method="post"> <!---il s’agit ici de traiter la validation d’un formulaire, et généralement les formulaires exécutent des requêtes POST.-->
-    <label for="username">Username</label>:
+    <label for="username">Username</label>:<!---légende pour objet d'une interface utilisateur-->
     <input type="text" id="username" name="username" autofocus="autofocus" /> <br />
     <label for="password">Password</label>:
     <input type="password" id="password" name="password" /> <br />

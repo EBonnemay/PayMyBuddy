@@ -1,6 +1,6 @@
 package com.projet6.paymybuddy.service;
 
-import com.projet6.paymybuddy.model.BankAccount;
+import com.projet6.paymybuddy.model.AppAccount;
 import com.projet6.paymybuddy.model.User;
 import com.projet6.paymybuddy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +39,18 @@ public class UserService {
 
     }
 
-    public List<BankAccount> getBankAccountsOfPrincipalUser() {
+    public AppAccount getAppAccountOfConnectedUser() {
 
-
+System.out.println("in GetbankAccountsForUser, auth about to be called");
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String email = auth.getName();
     User user = userRepository.findByEmail(email);
-    int id = user.getId();
-    List<BankAccount> listOfBankAccounts = getUserById(id).getBankAccounts();
-    return listOfBankAccounts;
+   AppAccount appAccount = user.getAppAccount();
+    System.out.println("appAccount of connected User retrieved");
+    System.out.println("iban = "+ appAccount.getIban());
+    return appAccount;
+}
+public User getUserFromEmail(String email){
+        return userRepository.findByEmail(email);
 }
 }

@@ -1,7 +1,6 @@
 package com.projet6.paymybuddy.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,8 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "bankaccount" )
-public class BankAccount {
+@Table(name = "appaccount" )
+public class AppAccount {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,13 +67,16 @@ public class BankAccount {
         )
         private List<BankAccount> bankAccountsOfFriendsIGaveMoneyTo = new ArrayList<>();
 */
-        @ManyToOne(
-                cascade = CascadeType.ALL,
-                fetch = FetchType.EAGER
+        @OneToOne(
+                //cascade = CascadeType.PERSIST,
+                fetch = FetchType.LAZY
         )
 
-        @JoinColumn(name = "user_id")
+        @JoinColumn(name = "user_id", referencedColumnName = "id")
         private User user;
+
+
+
 }
 //means that my bankAccount entity has a foreign key column named user_id_email referring
 //to the primary attribute id_email of my User Entity

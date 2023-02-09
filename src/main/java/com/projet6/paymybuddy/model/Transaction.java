@@ -3,9 +3,7 @@ package com.projet6.paymybuddy.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -33,19 +31,19 @@ public class Transaction {
     private Boolean statusOfTransaction;
 
     @ManyToOne(
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             fetch = FetchType.EAGER
     )
     @JoinColumn(name = "debited_account")
-    private BankAccount debitedAccount;
+    private AppAccount debitedAccount;
     //means that my transaction entity has a foreign key column named debited_account
     //referring to the primary k
     @ManyToOne(
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             fetch = FetchType.EAGER
     )
     @JoinColumn(name = "credited_account")
-    private BankAccount creditedAccount;
+    private AppAccount creditedAccount;
 
 
 

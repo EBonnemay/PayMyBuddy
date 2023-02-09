@@ -14,14 +14,14 @@ public class Connection {
         private int connectionId;
 
         @ManyToOne(
-                cascade = CascadeType.ALL,
+                cascade = CascadeType.PERSIST,
                 fetch = FetchType.EAGER
         )
         @JoinColumn(name = "author")
         private User author;
 
         @ManyToOne(
-                cascade = CascadeType.ALL,
+                cascade = CascadeType.PERSIST,
                 fetch = FetchType.EAGER
 
         )

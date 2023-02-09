@@ -1,7 +1,6 @@
 package com.projet6.paymybuddy.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,7 +48,28 @@ public class User {
     @Column(name = "connected")
     private Boolean connected;
 
-   @OneToMany(
+    @OneToOne(mappedBy = "user")
+    private AppAccount appAccount;
+
+
+    /*@OneToMany(
+            fetch = FetchType.EAGER,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private AppAccount appAccount = new AppAccount();*/
+
+    public void addAppAccount(AppAccount appAccount){
+        appAccount.setUser(this);
+        //ça ne save rien en db??!!!ou bien si??
+    }
+    /*public void removeBankAccount(BankAccount bankAccount){
+        remove(bankAccount);
+        bankAccount.setUser(this);*/
+
+
+  /* @OneToMany(
            fetch = FetchType.EAGER,
            mappedBy = "user",
            cascade = CascadeType.ALL,
@@ -65,7 +85,7 @@ public class User {
        bankAccount.setUser(this);
    }
    public void removeBankAccount(BankAccount bankAccount){
-       bankAccounts.add(bankAccount);
+       bankAccounts.remove(bankAccount);
        bankAccount.setUser(this);
    }
 

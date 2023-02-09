@@ -1,34 +1,23 @@
 package com.projet6.paymybuddy.controller;
 
-import com.projet6.paymybuddy.model.BankAccount;
-import com.projet6.paymybuddy.model.Connection;
+import com.projet6.paymybuddy.model.AppAccount;
 import com.projet6.paymybuddy.model.Transaction;
 import com.projet6.paymybuddy.model.User;
 
 import java.util.Optional;
-import com.projet6.paymybuddy.model.BankAccount;
-import com.projet6.paymybuddy.model.Connection;
-import com.projet6.paymybuddy.model.Transaction;
-import com.projet6.paymybuddy.model.User;
-import com.projet6.paymybuddy.service.BankAccountService;
+
+import com.projet6.paymybuddy.service.AppAccountService;
 import com.projet6.paymybuddy.service.TransactionService;
 import com.projet6.paymybuddy.service.ConnectionService;
 
 import com.projet6.paymybuddy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class GeneralRequestsController {
     @Autowired
     private UserService userService;
     @Autowired
-    private BankAccountService bankAccountService;
+    private AppAccountService appAccountService;
 
     @Autowired
     private TransactionService transactionService;
@@ -54,8 +43,7 @@ public class GeneralRequestsController {
         /**print the numbers (iban) of user with id 1 - check later if can do the same from bankaccount entity*/
         User user = userService.getUserById(1);//optUser = objet 1 potentiel
         //User firstUser = optUser.get();
-        user.getBankAccounts().forEach(
-                bankAccount -> System.out.println(bankAccount.getIban()));
+        user.getAppAccount();
     }
 
 
@@ -83,8 +71,8 @@ public class GeneralRequestsController {
         /**
          * print the amount of money on each account
          */
-        Iterable<BankAccount> bankAccounts = bankAccountService.getBankAccounts();
-        bankAccounts.forEach(bankAccount -> System.out.println(bankAccount.getAccountBalance()));
+        Iterable<AppAccount> appAccounts = appAccountService.findAllAppAccountInTable();
+        appAccounts.forEach(bankAccount -> System.out.println(bankAccount.getAccountBalance()));
     }
 
     public void printAmountOfmoneyOnBankAccountWithId2() {
@@ -92,15 +80,15 @@ public class GeneralRequestsController {
          * print the amount of money on bankaccount with id 2
          */
 
-        Optional<BankAccount> optBankAccount = bankAccountService.getBankAccountById(2);
-        BankAccount bankAccountId2 = optBankAccount.get();
-        System.out.println(bankAccountId2.getAccountBalance());
+        Optional<AppAccount> optAppAccount = appAccountService.getAppAccountById(2);
+        AppAccount appAccountId2 = optAppAccount.get();
+        System.out.println(appAccountId2.getAccountBalance());
     }
 
     /* public void firstNameAndIbanAndBankAccountIdOfPersonsWhoGAveMoneyToId2(){
       given I own bankaccount with id 2, give me the firstName of persons who gave me money, and the iban and id of the bankaccount they used
 
-         Optional<BankAccount> optBankAccount = bankAccountService.getBankAccountById(2);
+         Optional<BankAccount> optBankAccount = appAccountService.getBankAccountById(2);
          BankAccount bankAccountId2 = optBankAccount.get();
          bankAccountId2.getBankAccountsOfFriendsGivingMoneyToMe().
 
@@ -135,8 +123,8 @@ public class GeneralRequestsController {
         Optional<Transaction> optTransaction = transactionService.getTransactionById(1);
         Transaction transactionId1 = optTransaction.get();
         int giverAccountId = transactionId1.getDebitedAccount().getId();
-        Optional<BankAccount> optBank = bankAccountService.getBankAccountById(giverAccountId);//je pourrais aussi faire un lien direct transaction user.
-        BankAccount giverAccount = optBank.get();
+        Optional<AppAccount> optBank = appAccountService.getAppAccountById(giverAccountId);//je pourrais aussi faire un lien direct transaction user.
+        AppAccount giverAccount = optBank.get();
         System.out.println("giver of first transaction is " + giverAccount.getUser().
 
                 getFirstName());
@@ -153,10 +141,10 @@ public class GeneralRequestsController {
 		/*BankAccount newBankAccount = new BankAccount();
 		newBankAccount.setIban("aaaaaaaaaaaaaaa");
 		newBankAccount.setAccountBalance(1000);
-		bankAccountService.addBankAccount(newBankAccount);*/
+		appAccountService.addBankAccount(newBankAccount);*/
 //suppression d'un bank account en db
 
-    //bankAccountService.deleteBankAccountById(6);
+    //appAccountService.deleteBankAccountById(6);
 
     public void listOfConnectionIdsForUser4() {
 

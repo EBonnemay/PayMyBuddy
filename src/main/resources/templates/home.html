@@ -20,27 +20,36 @@
             <td><span th:text="${user.firstName}"></span></td>
             <td><span th:text="${user.lastName}"></span></td>
             <td><span th:text="${user.email}"></span></td>
-            <td><span><a th:href="@{'/delete/'+${user.id}}">Delete</a></span></td>
+            <td><span><a th:href="@{/deleteFriend(email = ${user.email})}">Delete</a></span></td>
+            <td><span><a th:href="@{/newTransaction(email = ${user.email})}">new Transaction</a></span></td>
         </tr>
     </tbody>
 </table>
-<h2 class="h2">My accounts</h2>
+<h2 class="h2">Add a friend</h2>
+<form th:action="@{/addFriend}" method="post">
+    <label for="email">Email</label>:
+    <input type="text" id="email" name="email" placeholder="Enter email" /> <br />
+
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+
+<h2 class="h2">My account</h2>
 <table>
-    <!-- pas d'entête thead -->
+    <!-- pas d'entête thead * th:object="${target}"-->
 
     <tbody>
     <!-- ne pas corriger les warnings IntelliJ sur les expressions spel -->
-    <tr th:if="${mybankaccounts.empty}">
+    <!---<tr th:if="${myappaccount==null}">
         <td colspan="3">Aucun compte enregistré</td>
-    </tr>
-    <tr th:each="bankaccount: ${mybankaccounts}">
-        <td><span th:text="${bankaccount.iban}"></span></td>
-        <td><span th:text="${bankaccount.accountBalance}"></span></td>
-        <td><span><a th:href="@{'/delete/'+${bankaccount.id}}">Delete</a></span></td>
-        <td><span><a th:href="@{'/update/'+${bankaccount.id}}">Update account balance</a></span></td>
+    </tr>-->
+    <tr >
+        <td><span th:text="${myappaccount.iban}"></span></td>
+        <td><span th:text="${myappaccount.accountBalance}"></span></td>
+        <td><span><a th:href="@{/deleteAppAccount}">Delete appAccount</a></span></td>
+        <td><span><a th:href="@{/updateAppAccount(id=${myappaccount.id})}">Update account balance</a></span></td>
     </tr>
     </tbody>
 </table>
-<h2 class="h2">Add a bank account</h2>
+
 </body>
 </html>
