@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,5 +66,45 @@ public class AppAccountService {
 
 
     }
+    public void setConnectedAccountToZero(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        System.out.println(email);
+        User connectedUser = userRepository.findByEmail(email);
+        AppAccount appAccount = connectedUser.getAppAccount();
+        appAccount.setAccountBalance(BigDecimal.valueOf(0));
+        appAccountRepository.save(appAccount);
+    }
+    /*public void setAccountToZero(int idOfCount){
 
+        Optional<AppAccount> opt = appAccountRepository.findById(idOfCount);
+        AppAccount appAccount = opt.get();
+        appAccount.setAccountBalance(BigDecimal.valueOf(0));
+        appAccountRepository.save(appAccount);
+    }*/
+    public void withdrawMoneyFromConnectedAccount(String currency_field_withdraw){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        System.out.println(email);
+        User connectedUser = userRepository.findByEmail(email);
+        AppAccount appAccount = connectedUser.getAppAccount();
+        BigDecimal currentBalance = appAccount.getAccountBalance();
+        BigDecimal withdrawedAmount = new BigDecimal(currency_field_withdraw);
+        appAccount.setAccountBalance(currentBalance.subtract(withdrawedAmount));
+        appAccountRepository.save(appAccount);
+
+    }
+
+    public void addMoneyFromConnectedAccount(String currency_field_add){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        System.out.println(email);
+        User connectedUser = userRepository.findByEmail(email);
+        AppAccount appAccount = connectedUser.getAppAccount();
+        BigDecimal currentBalance = appAccount.getAccountBalance();
+        BigDecimal addedAmount = new BigDecimal(currency_field_add);
+        appAccount.setAccountBalance(currentBalance.add(addedAmount));
+        appAccountRepository.save(appAccount);
+
+    }
 }

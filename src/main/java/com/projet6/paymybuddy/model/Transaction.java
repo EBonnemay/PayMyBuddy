@@ -3,6 +3,7 @@ package com.projet6.paymybuddy.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -22,7 +23,7 @@ public class Transaction {
    // private int debitedAccount_Id;
 
     @Column(name = "amount_of_transaction")
-    private float amountOfTransaction;
+    private BigDecimal amountOfTransaction;
 
     @Column(name = "date_time")
     private Date dateTime;
@@ -44,6 +45,8 @@ public class Transaction {
     )
     @JoinColumn(name = "credited_account")
     private AppAccount creditedAccount;
+
+
 
 
 

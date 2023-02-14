@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>
+    update amount on this bankaccount
+
+</p>
+<table>
+    <!-- pas d'entête thead * th:object="${target}"-->
+
+    <tbody>
+    <!-- ne pas corriger les warnings IntelliJ sur les expressions spel -->
+    <!---<tr th:if="${myappaccount==null}">
+        <td colspan="3">Aucun compte enregistré</td>
+    </tr>-->
+    <tr >
+        <td>my account number </span></td>
+        <td><span th:text="${myappaccount.iban}"></span></td>
+
+    </tr>
+    <td>my actual balance </span></td>
+    <td><span th:text="${myappaccount.accountBalance}"></span></td>
+    </tbody>
+</table>
+<form th:action="@{/emptyMyAppAccount(id=${myappaccount.id})}" method="post"> <!---il s’agit ici de traiter la validation d’un formulaire, et généralement les formulaires exécutent des requêtes POST.-->
+    <!---<label for="username">Username</label>:légende pour objet d'une interface utilisateur-->
+    <button class="btn btn-primary" type="submit">empty my account</button>
+</form>
+
+<form th:action="@{/withdrawMoneyFromMyAppAccount}" method = "post">
+
+    <label for="amounttowithdraw"> AmountToWithdraw</label>:
+    <input type="text" name="amount_withdrawed" id="amounttowithdraw"  placeholder="enter the amount to withdraw">
+    <button class="btn btn-primary" type="submit">withdraw money</button>
+</form>
+
+
+<form th:action="@{/addMoneyToMyAppAccount}" method = "post">
+
+    <label for="amounttoadd"> AmountToAdd</label>:
+    <input type="text" name="amount_added" id="amounttoadd"  placeholder="enter the amount to add">
+    <button class="btn btn-primary" type="submit">add money</button>
+</form>
+<!--<form action = "#" th:action="@{/save}" th:object="${appaccount}" method="post">
+
+    <label > iban:</label>
+    <input type="text" th:field="*{iban}" class="form-control" placeholder="new balance">
+
+    <label > balance: </label>
+    <input type="number" th:field="*{accountBalance}" class="form-control" placeholder="new balance">
+    <button type = "submit" class="btn-primary btn-block">Submit</button>
+</form>-->
+</body>
+</html>

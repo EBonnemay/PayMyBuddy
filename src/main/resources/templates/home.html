@@ -21,7 +21,7 @@
             <td><span th:text="${user.lastName}"></span></td>
             <td><span th:text="${user.email}"></span></td>
             <td><span><a th:href="@{/deleteFriend(email = ${user.email})}">Delete</a></span></td>
-            <td><span><a th:href="@{/newTransaction(email = ${user.email})}">new Transaction</a></span></td>
+            <td><span><a th:href="@{/newTransaction(id = ${user.id})}">new Transaction</a></span></td>
         </tr>
     </tbody>
 </table>

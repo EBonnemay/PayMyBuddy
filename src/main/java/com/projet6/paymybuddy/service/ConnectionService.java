@@ -5,10 +5,13 @@ import com.projet6.paymybuddy.model.User;
 import com.projet6.paymybuddy.repository.ConnectionRepository;
 import com.projet6.paymybuddy.repository.UserRepository;
 
+import com.sun.tools.jconsole.JConsoleContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,37 +51,17 @@ public class ConnectionService {
     public void saveConnection(Connection connection) {
         connectionRepository.save(connection);
     }
+    @Transactional
     public void deleteConnection(String emailOfUserToRemoveFromConnection){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication ok, called auth - here auth is email");
-        String email = auth.getName();
+        //try{
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("authentication ok, called auth - here auth is email");
+            String email = auth.getName();
 
-        User connectedUser = userRepository.findByEmail(email);
-        //charger le userConnected par son email
-        //passer en revue les amis du user
-        //si l'un d'entre eux est userToRemove
-        Iterable<Integer> ConnectionIdsForOneUserAsAuthorOrTarget =  connectionRepository.findConnectionIdsForOneUserAsAuthorOrTarget(connectedUser.getId());
-        //pour chaque objet connection de la personne connectée
-        for (Integer connectionId : ConnectionIdsForOneUserAsAuthorOrTarget ){
-            Optional<Connection> opt = connectionRepository.findById(connectionId);
-            Connection connection = opt.get();
-            //si author ou targer .equals userToRemove
-            if(connection.getAuthor().getEmail().equals(emailOfUserToRemoveFromConnection)|| connection.getTarget().getEmail().equals(emailOfUserToRemoveFromConnection)){
-                connectionRepository.delete(connection);
-                System.out.println(email);
-                System.out.println(emailOfUserToRemoveFromConnection);//edaugherty0@ebay.com
-                User userToDeleteFromConnection = userRepository.findByEmail(emailOfUserToRemoveFromConnection);
-                System.out.println(connectionRepository.findConnectionIdsForOneUserAsAuthorOrTarget(connectedUser.getId()));
-//expected 15, (16), 11
-                System.out.println(connectionRepository.findConnectionIdsForOneUserAsAuthorOrTarget(userToDeleteFromConnection.getId()));
+            User connectedUser = userRepository.findByEmail(email);
+            User userToDeleteFromConnection = userRepository.findByEmail(emailOfUserToRemoveFromConnection);
 
-                //expected 14, 12, (16)
-            }
-
-
-        }
-        Iterable<Connection> conn = connectionRepository.findAll();
-        connectionRepository.saveAll(conn);
+            connectionRepository.deleteRelationBetweenThoseUsers(connectedUser.getId(), userToDeleteFromConnection.getId());
 
     }
     public void saveConnectionForCurrentUserWithEmailParameter(String friendEmail) {

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class AppAccount {
         private String iban;
 
         @Column(name = "account_balance")
-        private float accountBalance;
+        private BigDecimal accountBalance;
 
        /* @ManyToMany(cascade = {
                 CascadeType.PERSIST,
