@@ -160,4 +160,6 @@ private List<Connection> connectionsAsAuthor = new ArrayList<>();
             orphanRemoval = true
     )
     private List<Connection> connectionsAsTarget = new ArrayList<>();
+
+    //private String firstLastName = firstName + lastName;
 }

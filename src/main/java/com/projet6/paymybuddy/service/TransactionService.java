@@ -41,19 +41,21 @@ public class TransactionService {
 
 
     @Transactional
-    public Transaction makeANewTransaction(String friendId, String amount){
+    public Transaction makeANewTransaction(String emailFriend, String amount){
         Transaction transaction = new Transaction();
 
         BigDecimal bdAmount = new BigDecimal(amount);
         transaction.setAmountOfTransaction(bdAmount);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        System.out.println(email);
-        User connectedUser = userRepository.findByEmail(email);
+        String emailConnectedUser = auth.getName();
+        System.out.println(emailConnectedUser);
+        User connectedUser = userRepository.findByEmail(emailConnectedUser);
         AppAccount fromAppAccount = connectedUser.getAppAccount();
-        Optional<User> opt = userRepository.findById(Integer.parseInt(friendId));
-        User friend = opt.get();
+
+        User friend = userRepository.findByEmail(emailFriend);
+        //Optional<User> opt = Optional.ofNullable(userRepository.findByEmail(emailFriend));
+        //User friend = opt.get();
         AppAccount toAppAccount = friend.getAppAccount();
 
         fromAppAccount.setAccountBalance(fromAppAccount.getAccountBalance().subtract(bdAmount));

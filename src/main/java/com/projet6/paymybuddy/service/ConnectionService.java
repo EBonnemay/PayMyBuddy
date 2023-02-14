@@ -92,6 +92,8 @@ public class ConnectionService {
         }
 
     }
+
+    //cette méthode fournit la liste déroulante d'amis
         public List<User> getFriendsUsersOfConnectedUser () {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             System.out.println("authentication ok, called auth - here auth is email");

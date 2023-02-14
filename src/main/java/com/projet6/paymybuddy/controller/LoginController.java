@@ -33,6 +33,7 @@ public class LoginController {
     AppAccountService appAccountService;
     @Autowired
     TransactionService transactionService;
+    //transformer le get home en post??,
     @GetMapping("/home")//url sur lequel répond la méthode
     public String goHome(Model model){
         //final UserDetails currentUserDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
@@ -68,13 +69,15 @@ public class LoginController {
         return "redirect:/home";
     }
     @GetMapping("/newTransaction")
-    public String newTransaction(@RequestParam("id") String id, Model model){
+    /*public String newTransaction(@RequestParam("id") String id, Model model){
         User friend = userService.getUserById(Integer.parseInt(id));
-        model.addAttribute("friend", friend);
+
+        return "add_transaction";*/
+    public String newTransaction(Model model){
+        model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
 
         model.addAttribute("mytransactions", transactionService.getConnectedUsersTransactions());
         return "add_transaction";
-
 
     }
     @GetMapping("/updateAppAccount")
@@ -108,11 +111,16 @@ public class LoginController {
 
     }
     @PostMapping("/makeANewTransaction")
-    public String makeANewTransaction(@RequestParam("friendId")String friendId, @RequestParam ("amount") String amount) {
-        transactionService.makeANewTransaction(friendId, amount);
-        return "redirect:/home";
+
+    public String makeANewTransaction(@RequestParam("email") String email, @RequestParam ("amount") String amount){
+        transactionService.makeANewTransaction(email, amount);
+        return"redirect:/newTransaction";
     }
 
 
 }
 
+/*public String makeANewTransaction(@RequestParam("friendId")String friendId, @RequestParam ("amount") String amount) {
+        transactionService.makeANewTransaction(friendId, amount);
+        return "redirect:/add_transaction";
+    }*/
