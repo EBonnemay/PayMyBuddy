@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,10 +44,28 @@ public class TransactionService {
 
 
     @Transactional
-    public Transaction makeANewTransaction(String emailFriend, String amount){
+    public Transaction makeANewTransaction(String emailFriend, String amount, String description)throws Exception{
         Transaction transaction = new Transaction();
 
-        BigDecimal bdAmount = new BigDecimal(amount);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDate localDate = LocalDate.now();
+        String localDateString = dtf.format(localDate);
+
+
+
+        BigDecimal bdAmountNotRound = new BigDecimal(amount);
+        BigDecimal bdAmount= bdAmountNotRound.setScale(2, RoundingMode.HALF_UP);
+       // if (bdAmount.compareTo(BigDecimal.ZERO) < 0){
+        //    return transaction;
+        //    }
+        if (!amount.matches("^\\d+(\\.\\d+)?$")) {
+
+            throw new IllegalArgumentException("Invalid amount: " + amount);
+        }
+        BigDecimal costOfThisTransactionNotRound = bdAmount.multiply(BigDecimal.valueOf(0.5)).divide(BigDecimal.valueOf(100));
+        BigDecimal costOfThisTransaction = costOfThisTransactionNotRound.setScale(2, RoundingMode.HALF_UP);
+
+        System.out.println(costOfThisTransaction);
         transaction.setAmountOfTransaction(bdAmount);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -58,7 +79,7 @@ public class TransactionService {
         //User friend = opt.get();
         AppAccount toAppAccount = friend.getAppAccount();
 
-        fromAppAccount.setAccountBalance(fromAppAccount.getAccountBalance().subtract(bdAmount));
+        fromAppAccount.setAccountBalance(fromAppAccount.getAccountBalance().subtract(bdAmount.add(costOfThisTransaction)));
         toAppAccount.setAccountBalance(toAppAccount.getAccountBalance().add(bdAmount));
 
         appAccountRepository.save(fromAppAccount);
@@ -66,6 +87,9 @@ public class TransactionService {
 
         transaction.setCreditedAccount(toAppAccount);
         transaction.setDebitedAccount(fromAppAccount);
+        transaction.setDate(localDateString);
+        transaction.setDescription(description);
+        transaction.setCostOfTransaction(costOfThisTransaction);
         transactionRepository.save(transaction);
 
         return transaction;

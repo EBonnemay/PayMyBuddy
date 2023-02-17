@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand mx-auto" href="#" style="pointer-events: none; cursor: default;">PayMyBuddy</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/personalPage">My personal space</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <p>send money</p>
+
+                <!--(friendId=${friend.id})paramètre ami-->
+                <form th:action="@{/makeANewTransaction}" method="post">
+                    <div>
+                        <p>select friend</p>
+                    <div>
+                    <table>
+                        <tr>
+                            <td> friend's first name</td>
+                            <td><select name="firstName">
+                                <option th:each="friend : ${myFriends}"
+                                        th:text="${friend.firstName}">
+                                </option>
+                            </select>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> friend's last name</td>
+                            <td><select name="lastName">
+                                <option th:each="friend : ${myFriends}"
+                                        th:text="${friend.lastName}">
+                                </option>
+                            </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> friend's email</td>
+                            <td><select name="email">
+                                <option th:each="friend : ${myFriends}"
+                                        th:text="${friend.email}">
+                                </option>
+                            </select>
+                            </td>
+
+                        </tr>
+                    </table>
+                        </div>
+                    </div>
+
+                        <div>
+
+                            <label for="amount">amount</label>
+                            <input type="text" id="amount" name="amount" placeholder="enter the amount to give to your friend"/>
+                            <p th:if="${transactionError}" class="error" th:text="${transactionError}"></p>
+
+                            <label for = "description">description</label>
+                            <input type="text" id="description" name="description" placeholder="enter the description of the transaction"/>
+                            <button type="submit" value="save"></button>
+                        </div>
+                        </form>
+
+
+            </div>
+
+            <div class="col-7">
+                <p>my transactions</p>
+
+
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Buddy's name</th>
+                        <th>Description</th>
+                        <th>Transaction amount</th>
+                        <th>Transaction fee</th>
+                        <th>Transaction date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="transaction, i : ${pageTransactions}">
+                        <tr>
+                            <td th:text="${transaction.creditedAccount.user.firstName}"></td>
+                            <td th:text="${transaction.description}"></td>
+                            <td th:text="${transaction.amountOfTransaction}"></td>
+                            <td th:text="${transaction.costOfTransaction}"></td>
+                            <td th:text="${transaction.date}"></td>
+                            </tr>
+                    </th:block>
+                    </tbody>
+                </table>                <!-- Add pagination controls here -->
+
+                <nav><!--start of navigation element-->
+                    <div th:if="${pageCount > 1}"> <!--"th:if" : conditionnal attribute. checks if total number of pages greater than 1-->
+                        <ul class="pagination"><!--if it is(more tha 1 page), pagination control will be shown;<ul>creates unordered list w pagination links-->
+                            <li th:class="${currentPage == 1} ? disabled"><!--if current page is 1, no link towards first page(?)-->
+                                <a th:if="${currentPage != 1}" th:href="@{${pageLink}(page=1)}">&laquo;</a><!--if condition true, anchor tag with << pointing twd page 1 will be rendered--->
+                                <a th:if="${currentPage == 1}">&laquo;</a>
+                            </li>
+                            <li th:class="${currentPage == 1} ? disabled">
+                                <a th:if="${currentPage != 1}" th:href="@{${pageLink}(page=${currentPage - 1})}">&lsaquo;</a>
+                                <a th:if="${currentPage == 1}">&lsaquo;</a>
+                            </li>
+                            <th:block th:each="pageNumber : ${#numbers.sequence(1, pageCount)}"><!---for each (page) number from 1 to pageCount-->
+                                <li th:class="${currentPage == pageNumber} ? active"><!--- for each iteration, a list item is created, in which the number matching with current page is set to active;-->
+                                    <a th:href="@{${pageLink}(page=${pageNumber})}" th:text="${pageNumber}"></a>
+                                </li>
+                            </th:block>
+                            <li th:class="${currentPage == pageCount} ? disabled">
+                                <a th:if="${currentPage != pageCount}" th:href="@{${pageLink}(page=${currentPage + 1})}">&rsaquo;</a>
+                                <a th:if="${currentPage == pageCount}">&rsaquo;</a>
+                            </li>
+                            <li th:class="${currentPage == pageCount} ? disabled">
+                                <a th:if="${currentPage != pageCount}" th:href="@{${pageLink}(page=${pageCount})}">&raquo;</a>
+                                <a th:if="${currentPage == pageCount}">&raquo;</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+
+
+            </div>
+        </div>
+    </div>
+
+</main>
+<footer></footer>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -21,15 +21,19 @@ public class Transaction {
 
    // @Column(name = "debited_account")
    // private int debitedAccount_Id;
-
+   @Column(name= "description")
+   private String description;
     @Column(name = "amount_of_transaction")
     private BigDecimal amountOfTransaction;
 
-    @Column(name = "date_time")
-    private Date dateTime;
+    @Column(name = "cost_of_transaction")
+    private BigDecimal costOfTransaction;
 
-    @Column(name = "transaction_completed")
-    private Boolean statusOfTransaction;
+    @Column(name = "date_time")
+    private String date;
+
+
+
 
     @ManyToOne(
             cascade = CascadeType.PERSIST,
