@@ -4,25 +4,27 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "transaction" )
 public class Transaction {
-//revoir primary key d'une table de liaison dans sprintBoot JPA
+    //revoir primary key d'une table de liaison dans sprintBoot JPA
     @Id
-   @Column(name = "id")
-   private int transactionId;
+    @Column(name = "id")
+    private int transactionId;
 //aurais du mettre credit_account_id
     //credit_account et debit_account sont des clés étrangères
     //@Column(name = "credited_account")
     //private int creditedAccount_Id;
 
-   // @Column(name = "debited_account")
-   // private int debitedAccount_Id;
-   @Column(name= "description")
-   private String description;
+    // @Column(name = "debited_account")
+    // private int debitedAccount_Id;
+    @Column(name = "description")
+    private String description;
     @Column(name = "amount_of_transaction")
     private BigDecimal amountOfTransaction;
 
@@ -31,8 +33,6 @@ public class Transaction {
 
     @Column(name = "date_time")
     private String date;
-
-
 
 
     @ManyToOne(
@@ -51,7 +51,9 @@ public class Transaction {
     private AppAccount creditedAccount;
 
 
-
+//créer un objet
+@Transient
+    List<Exception> exceptions;
 
 
 

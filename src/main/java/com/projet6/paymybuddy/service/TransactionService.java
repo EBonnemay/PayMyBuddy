@@ -92,7 +92,7 @@ public class TransactionService {
         transaction.setCostOfTransaction(costOfThisTransaction);
         transactionRepository.save(transaction);
 
-        return transaction;
+        return transaction;//rajouter les erreurs. rajouter un booleen Transient dans le modele, true s'il y a des erreurs. dans la vue regarder si true et afficher les erreurs
     };
     public ArrayList<Transaction> getConnectedUsersTransactions(){
         ArrayList<Transaction> myTransactions= new ArrayList<>();
