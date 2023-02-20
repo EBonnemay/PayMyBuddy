@@ -5,6 +5,20 @@
     <title>personalPageDApresMaquette</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+
+    <style>
+      main {
+        margin-left: 20%;
+        margin-right: 20%;
+      }
+      input, select, button{
+
+            width: 200px;
+            height: 40px;
+            margin: 2px;
+      }
+    </style>
 
 </head>
 <body>
@@ -13,7 +27,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-2 bg-success d-flex align-items-center justify-content-center" >
-                    <p class="text-white " style="padding-top:10px">Pay My Buddy</p>
+                    <p class="text-white " style="padding-top:5px">Pay My Buddy</p>
                 </div>
                 <div class="col-md-10 bg-white d-flex align-items-center justify-content-end">
 
@@ -42,8 +56,8 @@
     <div class="text-center border-bottom">
         <div class="container">
             <div class="row">
-                <div class="col-md-12 bg-light d-flex align-items-center justify-content-start" >
-                    <ul class="navbar-nav flex-row" style="margin-top: 10px;">
+                <div class="col-md-12 bg-light d-flex align-items-center justify-content-start"  >
+                    <ul class="navbar-nav flex-row" >
                         <li class="nav-item me-2 me-lg-0 mr-4">
                             <a class="nav-link" href="#">  Home </a>
                         </li>
@@ -60,9 +74,127 @@
     </div>
 </header>
 <main>
+    <row>
+        <div class="d-flex justify-content-between " style="padding-top:10px">
+                <p style="padding-top:10px"> Send Money</p>
+                <button class="btn btn-primary" >Add Connection</button>
+        </div>
+    </row>
 
+    <row>
+        <div class="bg-light d-flex align-items-center justify-content-center">
+            <div class="mx-5">
+                <select name="Connections" required>
+                    <option value="" disabled selected>Select A Connection</option>
+                    <option value="John Williams">John Williams</option>
+                    <option value="Alice Cooper">Alice Cooper</option>
+                    <option value="Mary Kullik">Mary Kullik</option>
+                </select>
+            </div>
+            <div class="my-4">
+                <input type="text" id="amount" name="amount" placeholder="0€"/>
+            </div>
+            <div class="mx-5">
+                <button type="submit" class="btn btn-success" value="save">Pay</button>
+            </div>
+        </div>
+    </row>
+    <row>
+        <div class="d-flex justify-content-between" style ="padding-top:5px">
+            <p style="padding-top:10px"> My Transactions</p>
+        </div>
+    </row>
+    <row>
+        <table id = "connection_table" class="table table-striped">
+            <thead class="table-success text-white">
+                <tr>
+                    <th>Connections</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Fee</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Colleen Hurst</td>
+                <td>Javascript Developer</td>
 
+                <td>39</td>
+                <td>2009/09/15</td>
+                <td>$205,500</td>
+            </tr>
+            <tr>
+                <td>Sonya Frost</td>
+                <td>Software Engineer</td>
+
+                <td>23</td>
+                <td>2008/12/13</td>
+                <td>$103,600</td>
+            </tr>
+            <tr>
+                <td>Jena Gaines</td>
+                <td>Office Manager</td>
+
+                <td>30</td>
+                <td>2008/12/19</td>
+                <td>$90,560</td>
+            </tr>
+            <tr>
+                <td>Quinn Flynn</td>
+                <td>Support Lead</td>
+
+                <td>22</td>
+                <td>2013/03/03</td>
+                <td>$342,000</td>
+            </tr>
+            <tr>
+                <td>Charde Marshall</td>
+                <td>Regional Director</td>
+
+                <td>36</td>
+                <td>2008/10/16</td>
+                <td>$470,600</td>
+            </tr>
+            <tr>
+                <td>Haley Kennedy</td>
+                <td>Senior Marketing Designer</td>
+
+                <td>43</td>
+                <td>2012/12/18</td>
+                <td>$313,500</td>
+            </tr>
+            <tr>
+                <td>Tatyana Fitzpatrick</td>
+                <td>Regional Director</td>
+
+                <td>19</td>
+                <td>2010/03/17</td>
+                <td>$385,750</td>
+            </tr>
+            <tr>
+                <td>Michael Silva</td>
+                <td>Marketing Designer</td>
+
+                <td>66</td>
+                <td>2012/11/27</td>
+                <td>$198,500</td>
+            </tr>
+                <!--<th:block th:each="transaction, i : ${pageTransactions}">
+                    <tr>
+                        <td th:text="${transaction.creditedAccount.user.firstName}"></td>
+                        <td th:text="${transaction.description}"></td>
+                        <td th:text="${transaction.amountOfTransaction}"></td>
+                        <td th:text="${transaction.costOfTransaction}"></td>
+                        <td th:text="${transaction.date}"></td>
+                    </tr>
+
+                </th:block>-->
+            </tbody>
+        </table>
+    </row>
 </main>
+
 
 <footer>
 
@@ -77,6 +209,19 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<!-- jQuery js-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<!-- Bootstrap js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- jQuery Datatable js -->
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<!-- Bootstrap Datatable js -->
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script>
+      $(document).ready( function () {
+          $('#connection_table').DataTable();
+      } );
+    </script>
 
 
 </body>
