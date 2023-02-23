@@ -9,11 +9,14 @@ import com.projet6.paymybuddy.service.AppAccountService;
 import com.projet6.paymybuddy.service.ConnectionService;
 import com.projet6.paymybuddy.service.TransactionService;
 import com.projet6.paymybuddy.service.UserService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +40,7 @@ public class LoginController {
     TransactionService transactionService;
     //transformer le get personal Page en post??,
     @GetMapping("/personalPage")//url sur lequel répond la méthode
-    public String goToPersonalPage(Model model){
+    public String displayPersonalPage(Model model){
         //final UserDetails currentUserDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
         //<Integer>friendsId = connectionRepository.findFriendsIdsForOneUser(1);
         //Page<User> friendsPage = friends.findAll(PageRequest.of(0,5));
@@ -48,27 +51,27 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String displayLoginPage(){
         System.out.println("login controller called via url will be asked to return login html page");
         return "login";
     }
 
     @GetMapping("/logout")
-    public String logout(){
+    public String displayLoginPageFromLogout(){
         return "login";
     }
     @GetMapping("/deleteAppAccount")
-    public String deleteAppAccount(){
+    public String deleteAppAccountAndRedirectPersonalPage(){
         appAccountService.deleteAppAccountOfConnectedUser();
         return "redirect:/personalPage";
     }
     @PostMapping("/addFriend")
-    public String addFriend(@RequestParam("email") String email) {
+    public String addConnectionAndRedirectPersonalPage(@RequestParam("email") String email) {
         connectionService.saveConnectionForCurrentUserWithEmailParameter(email);
         return "redirect:/personalPage";
     }
     @GetMapping("/deleteFriend")
-    public String deleteConnection(@RequestParam("email") String email){
+    public String deleteConnectionAndRedirectPersonalPage(@RequestParam("email") String email){
         connectionService.deleteConnection(email);
         return "redirect:/personalPage";
     }
@@ -90,22 +93,12 @@ public class LoginController {
 
     @GetMapping("/transactions")
 
-public String newTransaction(@RequestParam(defaultValue = "0") int page, Model model) {
+public String displayTransactionPage( Model model) {
     //ici ajouter un paramètre booléen pour signaler si erreur +
-        int pageSize = 7; // number of transactions to display per page
-    List<Transaction> transactions = transactionService.getConnectedUsersTransactions();
-
-    int totalPages = (int) Math.ceil((double) transactions.size() / pageSize);
-    int start = page * pageSize;
-    int end = Math.min(start + pageSize, transactions.size());
-
-    List<Transaction> pageTransactions = transactions.subList(start, end);
-// model.addAttribute("transactionError", "Transaction amount cannot be negative.");
-    model.addAttribute("pageTransactions", pageTransactions);
-    model.addAttribute("pageCount", totalPages);
-    model.addAttribute("currentPage", page);
-
-    model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
+        // number of transactions to display per page
+     model.addAttribute("myTransactions", transactionService.getConnectedUsersTransactions());
+     model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
+     //model.addAttribute("lastTransaction", )
     //model.addAttribute("transactionError", "Transaction amount cannot be negative.");
 
     return "/transactions";
@@ -113,7 +106,7 @@ public String newTransaction(@RequestParam(defaultValue = "0") int page, Model m
 
 
     @GetMapping("/updateAppAccount")
-    public String updateAppAccount(@RequestParam("id") String id, Model model) {
+    public String displayUpdateAppAccountPage(@RequestParam("id") String id, Model model) {
 
        Optional<AppAccount> opt  = appAccountService.getAppAccountById(Integer.parseInt(id));
        AppAccount appAccount = opt.get();
@@ -121,17 +114,17 @@ public String newTransaction(@RequestParam(defaultValue = "0") int page, Model m
         return "update_appaccount";
     }
     @PostMapping("/addMoneyToMyAppAccount")
-    public String addMoneyOnMyAppAccount(@RequestParam("amount_added")String amount_added){
+    public String addMoneyOnMyAppAccountAndRedirectPersonalPage(@RequestParam("amount_added")String amount_added){
         appAccountService.addMoneyFromConnectedAccount(amount_added);
         return "redirect:/personalPage";
     }
     @PostMapping("/withdrawMoneyFromMyAppAccount")
-    public String withdrawMoneyFromMyAppAccount(@RequestParam("amount_withdrawed")String amount_withdrawed){
+    public String withdrawMoneyFromMyAppAccountAndRedirectPersonalPage(@RequestParam("amount_withdrawed")String amount_withdrawed){
         appAccountService.withdrawMoneyFromConnectedAccount(amount_withdrawed);
         return "redirect:/personalPage";
     }
     @PostMapping("/emptyMyAppAccount")
-    public String emptyMyAppAccount(@RequestParam("id")String id){
+    public String emptyMyAppAccountAndRedirectPersonalPage(@RequestParam("id")String id){
         //cette ligne fonctionneOptional<AppAccount> opt  = appAccountService.getAppAccountById(Integer.parseInt(id));
         //cette ligne fonctionneAppAccount appAccount = opt.get();
 
@@ -144,18 +137,31 @@ public String newTransaction(@RequestParam(defaultValue = "0") int page, Model m
     }
     @PostMapping("/makeANewTransaction")
 
-    public String makeANewTransaction(@RequestParam("email") String email, @RequestParam ("amount") String amount,@RequestParam("description") String description ){
-        try {
-            transactionService.makeANewTransaction(email, amount, description);
-        }catch(Exception e) {
-            return"redirect:/transactionsWithErrors";
-        }
-        //retourner si objet transaction est nul, attribut erreur +
-        return"redirect:/transactions";
+    public String makeANewTransactionAndRedirectTransactionPage(@RequestParam("email") String email, @RequestParam ("amount") Number amount, @RequestParam("description") String description, Model model){
+
+        Transaction transaction = transactionService.makeANewTransaction(email,  amount, description);
+
+            //return"redirect:/transactions";
+       // public String displayTransactionPage( Model model) {
+            //ici ajouter un paramètre booléen pour signaler si erreur +
+            // number of transactions to display per page
+            model.addAttribute("myTransactions", transactionService.getConnectedUsersTransactions());
+            model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
+            //model.addAttribute("lastTransaction", )
+            model.addAttribute("transactionError", transaction.getExceptions());
+            if(transaction.getExceptions()!=null){
+                for(Exception exception : transaction.getExceptions()){
+                    String message = exception.getMessage();
+                }
+            }
+
+            return "/transactions";
+
     }
 
-    @GetMapping("/transactionsWithErrors")
 
+
+    /*  @GetMapping("/transactionsWithErrors")
     public String newTransactionWithErrors(@RequestParam(defaultValue = "0") int page, Model model) {
         //ici ajouter un paramètre booléen pour signaler si erreur +
         int pageSize = 7; // number of transactions to display per page
@@ -167,14 +173,12 @@ public String newTransaction(@RequestParam(defaultValue = "0") int page, Model m
 
         List<Transaction> pageTransactions = transactions.subList(start, end);
         model.addAttribute("transactionError", "Invalid amount, only digits and one point");
-        model.addAttribute("pageTransactions", pageTransactions);
-        model.addAttribute("pageCount", totalPages);
-        model.addAttribute("currentPage", page);
+
 
         model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
         //model.addAttribute("transactionError", "Transaction amount cannot be negative.");
 
-        return "/transactions";
-    }
+        return "/transaction";
+    }*/
 }
 

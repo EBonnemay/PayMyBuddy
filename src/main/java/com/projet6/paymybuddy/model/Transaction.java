@@ -1,7 +1,9 @@
 package com.projet6.paymybuddy.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import org.springframework.lang.NonNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,7 +27,10 @@ public class Transaction {
     // private int debitedAccount_Id;
     @Column(name = "description")
     private String description;
+
     @Column(name = "amount_of_transaction")
+
+   // @Positive(message = "amount must be positive")
     private BigDecimal amountOfTransaction;
 
     @Column(name = "cost_of_transaction")
@@ -53,11 +58,6 @@ public class Transaction {
 
 //créer un objet
 @Transient
-    List<Exception> exceptions;
-
-
-
-
-
+    List<MyException> exceptions;
 
 }
