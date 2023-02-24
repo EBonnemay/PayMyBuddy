@@ -3,46 +3,47 @@
 <head>
     <title>Login page</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+    main{
+    margin-top:5%;
+    margin-left:30%;
+    margin-right:30%;
+    }
+
+    </style>
 </head>
 <body>
 <header></header>
 <main>
-<div class="container">
-    <div class="d-flex justify-content-center align-items-center" style="height: 100vh">
-        <div class="p-3 mb-2 bg-light text-dark">
-    <div class="text-center ">
-
-            <h1>PayMyBuddy</h1>
-
-            <!--<p th:if="${loginError}" class="error">Wrong user or password</p>
-
-                <div>
-                    <label>Username</label>
-                    <input type="text" th:field="*{username}">
-
-                </div>
-                <div>
-                    <label>password</label>
-                    <input type="password" th:field="*{password}">
-                </div>
-                <div>
-                    <input type="submit" value="submit">
-                </div>-->
-               <!--<div th:if="${param.error}">
-                    <p class="error">Wrong user or password</p>
-                </div>-->
+    <div class="container d-flex justify-content-center bg-light border border-dark py-4">
         <form th:action="@{/login}"  method="post">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" autofocus="autofocus" /> <br />
-                <label for="password">Password</label>:
-                <input type="password" id="password" name="password" /> <br />
-                <input type="submit" value="Log in" />
-
-            </form>
-        </div>
+            <div class="row py-4 bg-success text-white d-flex justify-content-center ">PayMyBuddy</div>
+            <div class="row py-4">
+                <input type="text" id="username" name="username" autofocus="autofocus" placeholder="email" style="width: 200px; height: 40px; margin: 2px;"/> <br />
             </div>
-   </div>
-</div>
+            <div class="row py-4">
+                <input type="password" id="password" name="password"placeholder="password" style="width: 200px; height: 40px; margin: 2px;" /> <br />
+            </div>
+            <div class="form-group row py-4">
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">
+                            Remember me
+                        </label>
+                    </div>
+
+            </div>
+            <div th:if="${param.error}">
+                <p class="error">Wrong user or password</p>
+            </div>
+            <div class="row pt-4">
+                <input type="submit" value="Login" style="width: 200px; height: 40px; margin: 2px;" />
+            </div >
+
+        </form>
+    </div>
+
 </main>
 <footer></footer>
 
@@ -52,3 +53,22 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
+<!--<p th:if="${loginError}" class="error">Wrong user or password</p>
+
+    <div>
+        <label>Username</label>
+        <input type="text" th:field="*{username}">
+
+    </div>
+    <div>
+        <label>password</label>
+        <input type="password" th:field="*{password}">
+    </div>
+    <div>
+        <input type="submit" value="submit">
+    </div>-->
+<!--<div th:if="${param.error}">
+     <p class="error">Wrong user or password</p>
+ </div>-->

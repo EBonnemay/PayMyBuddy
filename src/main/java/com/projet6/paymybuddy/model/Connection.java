@@ -3,6 +3,8 @@ package com.projet6.paymybuddy.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "connection" )
@@ -27,5 +29,8 @@ public class Connection {
         )
         @JoinColumn(name = "target")
         private User target;
+
+        @Transient
+        List<MyException> exceptions;
 
 }

@@ -96,6 +96,17 @@ public class TransactionService {
         System.out.println(emailConnectedUser);
         User connectedUser = userRepository.findByEmail(emailConnectedUser);
         AppAccount fromAppAccount = connectedUser.getAppAccount();
+        try{
+            if (bdAmount.compareTo(fromAppAccount.getAccountBalance())==1){
+                String message = "your account is not provisioned for this operation";
+                MyException exception = new MyException(message);
+                logger.info("user input error : account not provisioned for this operation");
+                throw exception;
+            }
+        }catch(MyException e){
+            transaction.getExceptions().add(e);
+            return transaction;
+        }
 
         User friend = userRepository.findByEmail(emailFriend);
         //Optional<User> opt = Optional.ofNullable(userRepository.findByEmail(emailFriend));

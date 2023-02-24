@@ -66,9 +66,19 @@ public class LoginController {
         return "redirect:/personalPage";
     }
     @PostMapping("/addFriend")
-    public String addConnectionAndRedirectPersonalPage(@RequestParam("email") String email) {
-        connectionService.saveConnectionForCurrentUserWithEmailParameter(email);
-        return "redirect:/personalPage";
+    public String addConnectionAndRedirectPersonalPage(@RequestParam("email") String email, Model model) {
+        Connection connection = connectionService.saveConnectionForCurrentUserWithEmailParameter(email);
+        model.addAttribute("myfriends", connectionService.getFriendsUsersOfConnectedUser());
+        model.addAttribute("myappaccount", userService.getAppAccountOfConnectedUser() );
+        model.addAttribute("connectionError", connection.getExceptions());
+        if(connection.getExceptions()!=null){
+            for(Exception exception : connection.getExceptions()){
+                String message = exception.getMessage();
+            }
+        }
+        return "personalPage";
+
+        //si connectionService.saveCOnnection a échoué, renvoyer
     }
     @GetMapping("/deleteFriend")
     public String deleteConnectionAndRedirectPersonalPage(@RequestParam("email") String email){

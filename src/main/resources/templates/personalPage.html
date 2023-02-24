@@ -108,6 +108,11 @@
                 <form th:action="@{/addFriend}" method="post">
                     <label for="email">Email</label>:
                     <input type="text" id="email" name="email" placeholder="Enter email"/> <br/>
+                    <div th:if="${not #lists.isEmpty(connectionError)}">
+                        <ul>
+                            <li th:each="error : ${connectionError}" th:text="${error.message}"></li>
+                        </ul>
+                    </div>
 
                     <button class="btn btn-primary" type="submit">Save</button>
                 </form>

@@ -1,11 +1,14 @@
 package com.projet6.paymybuddy.service;
 
 import com.projet6.paymybuddy.model.Connection;
+import com.projet6.paymybuddy.model.MyException;
 import com.projet6.paymybuddy.model.User;
 import com.projet6.paymybuddy.repository.ConnectionRepository;
 import com.projet6.paymybuddy.repository.UserRepository;
 
 import com.sun.tools.jconsole.JConsoleContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
@@ -25,6 +28,8 @@ public class ConnectionService {
     private ConnectionRepository connectionRepository;
     @Autowired
     private UserRepository userRepository;
+
+    static final Logger logger = LogManager.getLogger();
 
     public Iterable<Connection> getConnections() {
         return connectionRepository.findAll();
@@ -64,13 +69,26 @@ public class ConnectionService {
             connectionRepository.deleteRelationBetweenThoseUsers(connectedUser.getId(), userToDeleteFromConnection.getId());
 
     }
-    public void saveConnectionForCurrentUserWithEmailParameter(String friendEmail) {
-
+    public Connection saveConnectionForCurrentUserWithEmailParameter(String friendEmail) {
+        Connection newConnection = new Connection();
+        List<MyException> listOfConnectionExceptions = new ArrayList<>();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("authentication ok, called auth - here auth is email");
         String email = auth.getName();
 
         User author = userRepository.findByEmail(email);
+        try {
+            if (userRepository.findByEmail(friendEmail)==null) {
+                String message = "you must enter an email address";
+                MyException exception = new MyException(message);
+                logger.info("user input error : input cannot be void");
+                throw exception;
+            }
+        }catch(MyException exception){
+            listOfConnectionExceptions.add(exception);
+            newConnection.setExceptions(listOfConnectionExceptions);
+            return newConnection;
+        }
         User target = userRepository.findByEmail(friendEmail);
 
         int authorId = author.getId();
@@ -80,17 +98,23 @@ public class ConnectionService {
         Iterator<Integer> iterator = iterable.iterator();
         List<Integer> friendsIds = new ArrayList<Integer>();
         iterable.forEach(friendsIds::add);
-
-        if(!friendsIds.contains(targetId)) {
-            Connection newConnection = new Connection();
-            newConnection.setAuthor(author);
-            newConnection.setTarget(target);
-            connectionRepository.save(newConnection);
+        try {
+            if (friendsIds.contains(targetId)) {
+                String message = "friend already in list";
+                MyException exception = new MyException(message);
+                logger.info("user input error : friend already in list");
+                throw exception;
+            }
+        }catch(MyException exception){
+            listOfConnectionExceptions.add(exception);
+            newConnection.setExceptions(listOfConnectionExceptions);
+            return newConnection;
         }
-        else{
-            System.out.println("vous avez déjà cet ami");
-        }
 
+        newConnection.setAuthor(author);
+        newConnection.setTarget(target);
+        connectionRepository.save(newConnection);
+        return newConnection;
     }
 
     //cette méthode fournit la liste déroulante d'amis
