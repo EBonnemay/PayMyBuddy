@@ -12,16 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class PaymybuddyApplication implements CommandLineRunner {
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private AppAccountService appAccountService;
-
-	@Autowired
-	private TransactionService transactionService;
-
-	@Autowired
-	private ConnectionService connectionService;
+	
 
 	public static void main(String[] args) {
 		System.out.println("main called");

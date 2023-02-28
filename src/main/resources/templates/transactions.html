@@ -118,6 +118,12 @@
                                 <option th:each="friend : ${myFriends}"
                                             th:text="${friend.email}">
                                 </option>
+                                <div th:if="${not #lists.isEmpty(transactionError)}">
+                                    <ul>
+                                        <li th:each="error : ${transactionError}" th:text="${error.message}"></li>
+                                    </ul>
+                                </div>
+
                             </select>
                         </div>
                         <div class = "mx-2" >

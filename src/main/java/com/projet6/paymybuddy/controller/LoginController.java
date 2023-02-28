@@ -1,9 +1,6 @@
 package com.projet6.paymybuddy.controller;
 
-import com.projet6.paymybuddy.model.AppAccount;
-import com.projet6.paymybuddy.model.Connection;
-import com.projet6.paymybuddy.model.Transaction;
-import com.projet6.paymybuddy.model.User;
+import com.projet6.paymybuddy.model.*;
 import com.projet6.paymybuddy.repository.AppAccountRepository;
 import com.projet6.paymybuddy.service.AppAccountService;
 import com.projet6.paymybuddy.service.ConnectionService;
@@ -11,6 +8,8 @@ import com.projet6.paymybuddy.service.TransactionService;
 import com.projet6.paymybuddy.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -39,6 +39,8 @@ public class LoginController {
     @Autowired
     TransactionService transactionService;
     //transformer le get personal Page en post??,
+
+    static final Logger logger = LogManager.getLogger();
     @GetMapping("/personalPage")//url sur lequel répond la méthode
     public String displayPersonalPage(Model model){
         //final UserDetails currentUserDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
@@ -147,17 +149,13 @@ public String displayTransactionPage( Model model) {
     }
     @PostMapping("/makeANewTransaction")
 
-    public String makeANewTransactionAndRedirectTransactionPage(@RequestParam("email") String email, @RequestParam ("amount") Number amount, @RequestParam("description") String description, Model model){
-
+    public String makeANewTransactionAndRedirectTransactionPage(@RequestParam(name="email", required=false) String email, @RequestParam (name="amount", required=false) Number amount, @RequestParam(name="description", required=false) String description, Model model){
+        //calling service
         Transaction transaction = transactionService.makeANewTransaction(email,  amount, description);
 
-            //return"redirect:/transactions";
-       // public String displayTransactionPage( Model model) {
-            //ici ajouter un paramètre booléen pour signaler si erreur +
-            // number of transactions to display per page
             model.addAttribute("myTransactions", transactionService.getConnectedUsersTransactions());
             model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
-            //model.addAttribute("lastTransaction", )
+
             model.addAttribute("transactionError", transaction.getExceptions());
             if(transaction.getExceptions()!=null){
                 for(Exception exception : transaction.getExceptions()){

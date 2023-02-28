@@ -67,6 +67,7 @@ public class ConnectionService {
             User userToDeleteFromConnection = userRepository.findByEmail(emailOfUserToRemoveFromConnection);
 
             connectionRepository.deleteRelationBetweenThoseUsers(connectedUser.getId(), userToDeleteFromConnection.getId());
+            logger.info("connection with user "+ emailOfUserToRemoveFromConnection + " deleted successfully");
 
     }
     public Connection saveConnectionForCurrentUserWithEmailParameter(String friendEmail) {
@@ -81,7 +82,7 @@ public class ConnectionService {
             if (userRepository.findByEmail(friendEmail)==null) {
                 String message = "you must enter an email address";
                 MyException exception = new MyException(message);
-                logger.info("user input error : input cannot be void");
+                logger.debug("user input error : input cannot be void");
                 throw exception;
             }
         }catch(MyException exception){
@@ -102,7 +103,7 @@ public class ConnectionService {
             if (friendsIds.contains(targetId)) {
                 String message = "friend already in list";
                 MyException exception = new MyException(message);
-                logger.info("user input error : friend already in list");
+                logger.debug("user input error : friend already in list");
                 throw exception;
             }
         }catch(MyException exception){
@@ -114,6 +115,7 @@ public class ConnectionService {
         newConnection.setAuthor(author);
         newConnection.setTarget(target);
         connectionRepository.save(newConnection);
+        logger.info("connection with user "+ friendEmail + " added successfully");
         return newConnection;
     }
 
@@ -131,6 +133,7 @@ public class ConnectionService {
                 User user = optUser.get();
                 friends.add(user);
             }
+
             return friends ;
         }
         //récupérer l'id de l'utilisateur connecté et injecter en param ICI

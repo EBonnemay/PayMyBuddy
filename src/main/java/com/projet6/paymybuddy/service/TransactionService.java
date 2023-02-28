@@ -48,87 +48,110 @@ public class TransactionService {
 
     @Transactional
     public Transaction makeANewTransaction(String emailFriend, Number amount, String description){
+        logger.info("system called makeANewTransaction with parameters "+ emailFriend +" "+ amount+" "+ description+ " ");
+        System.out.println("system called makeANewTransaction with parameters "+ emailFriend +" "+ amount+" "+ description+ " ");
+
+
+       //instanciate object transaction with listOfTransactionExceptions
         Transaction transaction = new Transaction();
-        List<MyException> listOfExceptions = new ArrayList<MyException>();//nouvel objet transaction
-        transaction.setExceptions(listOfExceptions);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        LocalDate localDate = LocalDate.now();
-        String localDateString = dtf.format(localDate); //créer une date "maintenant"
+        List<MyException> listOfTransactionExceptions = new ArrayList<MyException>();//nouvel objet transaction
+        transaction.setExceptions(listOfTransactionExceptions);
 
 
-
-        BigDecimal bdAmountNotRound = new BigDecimal(amount.toString());
-        BigDecimal bdAmount= bdAmountNotRound.setScale(2, RoundingMode.HALF_UP);
-
-
-       // try {bdAmount.compareTo(BigDecimal.ZERO) > 0;
         try {
-            if (bdAmount.compareTo(BigDecimal.ZERO) < 0) {
-                String message = "amount cannot be negative";
+            if(emailFriend==null){
+                //if (userRepository.findByEmail(emailFriend)==null) {
+                String message = "you must enter an email address";
                 MyException exception = new MyException(message);
-                logger.info("user input error : amount is negative");
+                logger.debug("user input error : input cannot be void");
                 throw exception;
             }
-            // do something if bdAmount is positive or zero
-        } catch (MyException e) {
-            transaction.getExceptions().add(e);
+        }catch(MyException wrongEmailInput){
+            listOfTransactionExceptions.add(wrongEmailInput);
+            transaction.setExceptions(listOfTransactionExceptions);
             return transaction;
+
         }
         try{
-            if (!amount.toString().matches("^\\d+(,\\d{1,2})?$")){
+            if(description==null){
+                String message = "you must enter a description";
+                MyException exception = new MyException(message);
+                logger.debug("user input error : description cannot be void");
+                throw exception;
+            }
+        }catch(MyException wrongEmailInput){
+            listOfTransactionExceptions.add(wrongEmailInput);
+            transaction.setExceptions(listOfTransactionExceptions);
+            return transaction;
+
+        }
+
+        //handle no amount input
+        try{
+            if(amount==null) {
                 String message = "invalid amount";
                 MyException exception = new MyException(message);
-                logger.info("user input error : invalid amount");
+                logger.debug("user input error : invalid amount");
                 throw exception;
             }
-        }catch(MyException e){
-            transaction.getExceptions().add(e);
-            return transaction;
-        }
-        BigDecimal costOfThisTransactionNotRound = bdAmount.multiply(BigDecimal.valueOf(0.5)).divide(BigDecimal.valueOf(100));
-        BigDecimal costOfThisTransaction = costOfThisTransactionNotRound.setScale(2, RoundingMode.HALF_UP);
+            BigDecimal bdAmountNotRound = new BigDecimal(amount.toString());
+            BigDecimal bdAmount= bdAmountNotRound.setScale(2, RoundingMode.HALF_UP);
 
-        System.out.println(costOfThisTransaction);
-        transaction.setAmountOfTransaction(bdAmount);
+            if(bdAmount.compareTo(BigDecimal.ZERO) < 0) {
+                String message = "amount cannot be negative";
+                MyException exception = new MyException(message);
+                logger.debug("user input error : amount is negative");
+                throw exception;
+            }
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String emailConnectedUser = auth.getName();
-        System.out.println(emailConnectedUser);
-        User connectedUser = userRepository.findByEmail(emailConnectedUser);
-        AppAccount fromAppAccount = connectedUser.getAppAccount();
-        try{
+            if (!amount.toString().matches("^\\d+(.\\d{1,2})?$")) {
+                String message = "invalid amount";
+                MyException exception = new MyException(message);
+                logger.debug("user input error : invalid amount");
+                throw exception;
+            }
+            BigDecimal costOfThisTransactionNotRound = bdAmount.multiply(BigDecimal.valueOf(0.5)).divide(BigDecimal.valueOf(100));
+            BigDecimal costOfThisTransaction = costOfThisTransactionNotRound.setScale(2, RoundingMode.HALF_UP);
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String emailConnectedUser = auth.getName();
+            logger.info("authenticated User has email "+ emailConnectedUser);
+            User connectedUser = userRepository.findByEmail(emailConnectedUser);
+            AppAccount fromAppAccount = connectedUser.getAppAccount();
+
+
             if (bdAmount.compareTo(fromAppAccount.getAccountBalance())==1){
                 String message = "your account is not provisioned for this operation";
                 MyException exception = new MyException(message);
-                logger.info("user input error : account not provisioned for this operation");
+                logger.debug("user input error : account not provisioned for this operation");
                 throw exception;
             }
-        }catch(MyException e){
-            transaction.getExceptions().add(e);
-            return transaction;
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            LocalDate localDate = LocalDate.now();
+            String localDateString = dtf.format(localDate); //créer une date "maintenant"
+
+            User friend = userRepository.findByEmail(emailFriend);
+            AppAccount toAppAccount = friend.getAppAccount();
+
+            fromAppAccount.setAccountBalance(fromAppAccount.getAccountBalance().subtract(bdAmount.add(costOfThisTransaction)));
+            toAppAccount.setAccountBalance(toAppAccount.getAccountBalance().add(bdAmount));
+
+            appAccountRepository.save(fromAppAccount);
+            appAccountRepository.save(toAppAccount);
+            transaction.setAmountOfTransaction(bdAmount);
+            transaction.setCreditedAccount(toAppAccount);
+            transaction.setDebitedAccount(fromAppAccount);
+            transaction.setDate(localDateString);
+            transaction.setDescription(description);
+            transaction.setCostOfTransaction(costOfThisTransaction);
+            transactionRepository.save(transaction);
+
+        }catch(MyException exception){
+            transaction.getExceptions().add(exception);
+
         }
-
-        User friend = userRepository.findByEmail(emailFriend);
-        //Optional<User> opt = Optional.ofNullable(userRepository.findByEmail(emailFriend));
-        //User friend = opt.get();
-        AppAccount toAppAccount = friend.getAppAccount();
-
-        fromAppAccount.setAccountBalance(fromAppAccount.getAccountBalance().subtract(bdAmount.add(costOfThisTransaction)));
-        toAppAccount.setAccountBalance(toAppAccount.getAccountBalance().add(bdAmount));
-
-        appAccountRepository.save(fromAppAccount);
-        appAccountRepository.save(toAppAccount);
-
-        transaction.setCreditedAccount(toAppAccount);
-        transaction.setDebitedAccount(fromAppAccount);
-        transaction.setDate(localDateString);
-        transaction.setDescription(description);
-        transaction.setCostOfTransaction(costOfThisTransaction);
-        transaction.setExceptions(transaction.getExceptions());
-        transactionRepository.save(transaction);
-
-        return transaction;//rajouter les erreurs. rajouter un booleen Transient dans le modele, true s'il y a des erreurs. dans la vue regarder si true et afficher les erreurs
-    };
+        return transaction;
+    }
     public ArrayList<Transaction> getConnectedUsersTransactions(){
         ArrayList<Transaction> myTransactions= new ArrayList<>();
 
@@ -146,5 +169,4 @@ public class TransactionService {
         }
         return myTransactions;
     }
-
 }
