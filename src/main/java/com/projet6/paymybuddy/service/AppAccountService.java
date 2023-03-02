@@ -96,9 +96,7 @@ public class AppAccountService {
     }
 
     public void addMoneyFromConnectedAccount(String currency_field_add){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        System.out.println(email);
+        String email = userService.getCurrentUsersMailAddress();
         User connectedUser = userRepository.findByEmail(email);
         AppAccount appAccount = connectedUser.getAppAccount();
         BigDecimal currentBalance = appAccount.getAccountBalance();

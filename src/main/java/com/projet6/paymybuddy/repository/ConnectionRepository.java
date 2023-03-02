@@ -11,10 +11,8 @@ import org.springframework.stereotype.Repository;
 public interface ConnectionRepository extends CrudRepository<Connection, Integer> {
     @Query(value = "SELECT target FROM connection WHERE author = :id UNION ALL SELECT author FROM connection WHERE target = :id", nativeQuery = true)
     Iterable<Integer> findFriendsIdsForOneUser(@Param("id") int userIdRequested);
-
     @Query(value = "SELECT id FROM connection WHERE author = :id UNION ALL SELECT id FROM connection WHERE target = :id", nativeQuery = true)
     Iterable<Integer> findConnectionIdsForOneUserAsAuthorOrTarget(@Param("id")int userIdRequested);
-
     @Modifying
     @Query(value = "DELETE FROM connection WHERE (author = :a AND target = :b) OR (author = :b AND target = :a)", nativeQuery = true)
     void deleteRelationBetweenThoseUsers(@Param("a") int userA, @Param("b") int userB);

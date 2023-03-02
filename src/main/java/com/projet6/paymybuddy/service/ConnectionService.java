@@ -29,6 +29,9 @@ public class ConnectionService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     static final Logger logger = LogManager.getLogger();
 
     public Iterable<Connection> getConnections() {
@@ -59,9 +62,7 @@ public class ConnectionService {
     @Transactional
     public void deleteConnection(String emailOfUserToRemoveFromConnection){
         //try{
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println("authentication ok, called auth - here auth is email");
-            String email = auth.getName();
+        String email = userService.getCurrentUsersMailAddress();
 
             User connectedUser = userRepository.findByEmail(email);
             User userToDeleteFromConnection = userRepository.findByEmail(emailOfUserToRemoveFromConnection);
@@ -73,11 +74,11 @@ public class ConnectionService {
     public Connection saveConnectionForCurrentUserWithEmailParameter(String friendEmail) {
         Connection newConnection = new Connection();
         List<MyException> listOfConnectionExceptions = new ArrayList<>();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication ok, called auth - here auth is email");
-        String email = auth.getName();
 
+        String email = userService.getCurrentUsersMailAddress();
         User author = userRepository.findByEmail(email);
+
+
         try {
             if (userRepository.findByEmail(friendEmail)==null) {
                 String message = "you must enter an email address";
@@ -121,9 +122,7 @@ public class ConnectionService {
 
     //cette méthode fournit la liste déroulante d'amis
         public List<User> getFriendsUsersOfConnectedUser () {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println("authentication ok, called auth - here auth is email");
-            String email = auth.getName();
+            String email = userService.getCurrentUsersMailAddress();
 
             List<User> friends = new ArrayList();
             System.out.println("friends about to be retrived from auth");
@@ -139,8 +138,7 @@ public class ConnectionService {
         //récupérer l'id de l'utilisateur connecté et injecter en param ICI
         //récupérer utilisateur connecté couramment
         public Iterable<String> getNamesOfFriendsForPrincipalUSer () {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String email = auth.getName();
+            String email = userService.getCurrentUsersMailAddress();
 
             List<String> listOfFriendsNames = new ArrayList();
 //>>

@@ -19,8 +19,6 @@ public class AppAccount {
         @Column(name = "id")
         private int id;
 
-        @Column(name = "iban")
-        private String iban;
 
         @Column(name = "account_balance")
         private BigDecimal accountBalance;

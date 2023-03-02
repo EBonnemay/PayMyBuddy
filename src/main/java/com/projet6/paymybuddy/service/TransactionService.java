@@ -31,6 +31,9 @@ public class TransactionService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private AppAccountRepository appAccountRepository;
 
     static final Logger logger = LogManager.getLogger();
@@ -113,8 +116,7 @@ public class TransactionService {
             BigDecimal costOfThisTransactionNotRound = bdAmount.multiply(BigDecimal.valueOf(0.5)).divide(BigDecimal.valueOf(100));
             BigDecimal costOfThisTransaction = costOfThisTransactionNotRound.setScale(2, RoundingMode.HALF_UP);
 
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String emailConnectedUser = auth.getName();
+            String emailConnectedUser = userService.getCurrentUsersMailAddress();
             logger.info("authenticated User has email "+ emailConnectedUser);
             User connectedUser = userRepository.findByEmail(emailConnectedUser);
             AppAccount fromAppAccount = connectedUser.getAppAccount();
@@ -154,9 +156,7 @@ public class TransactionService {
     }
     public ArrayList<Transaction> getConnectedUsersTransactions(){
         ArrayList<Transaction> myTransactions= new ArrayList<>();
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
+        String email = userService.getCurrentUsersMailAddress();
         System.out.println(email);
         User connectedUser = userRepository.findByEmail(email);
 

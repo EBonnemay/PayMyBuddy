@@ -40,17 +40,18 @@ public class UserService {
     }
 
     public AppAccount getAppAccountOfConnectedUser() {
-
-System.out.println("in GetbankAccountsForUser, auth about to be called");
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String email = auth.getName();
+    String email = getCurrentUsersMailAddress();
     User user = userRepository.findByEmail(email);
    AppAccount appAccount = user.getAppAccount();
-    System.out.println("appAccount of connected User retrieved");
-    System.out.println("iban = "+ appAccount.getIban());
+
     return appAccount;
 }
 public User getUserFromEmail(String email){
         return userRepository.findByEmail(email);
 }
+public String getCurrentUsersMailAddress(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        return email;
+    }
 }

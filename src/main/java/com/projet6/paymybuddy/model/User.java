@@ -39,14 +39,7 @@ public class User {
     @Column(name = "email_password")
     private String emailPassord;
 
-    @Column(name = "social_network_login")
-    private String socialNetworkLogin;
 
-    @Column(name = "social_network_password")
-    private String socialNetworkPassWord;
-
-    @Column(name = "connected")
-    private Boolean connected;
 
     @OneToOne(mappedBy = "user")
     private AppAccount appAccount;

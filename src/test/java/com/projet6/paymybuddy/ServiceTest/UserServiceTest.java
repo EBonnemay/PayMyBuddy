@@ -1,8 +1,8 @@
-package com.projet6.paymybuddy.RepositoryTest;
+package com.projet6.paymybuddy.ServiceTest;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class RepositoryTest {
+public class UserServiceTest {
 
 }
