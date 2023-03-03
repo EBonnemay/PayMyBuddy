@@ -55,12 +55,12 @@ public class SpringSecurityConfig  {
 
 
     @Bean
-    PasswordEncoder getPasswordEncoder() {//encode les mots de passe > algorithme de hachage
+    public PasswordEncoder getPasswordEncoder() {//encode les mots de passe > algorithme de hachage
         // Si les mots de passe sont en clair en base de données
         // Uniquement pour la phase de développement
-        return NoOpPasswordEncoder.getInstance();
+        //return NoOpPasswordEncoder.getInstance();
         // Si les mots de passe sont chiffrés avec BCrypt
-        //return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
    //@Bean
     //public HttpSecurity httpSecurity() throws Exception{

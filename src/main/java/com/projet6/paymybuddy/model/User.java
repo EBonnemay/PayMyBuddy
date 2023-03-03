@@ -24,20 +24,12 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "adress")
-    private String address;
-
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "country")
-    private String country;
 
     @Column(name = "email")
     private String email;
 
     @Column(name = "email_password")
-    private String emailPassord;
+    private String emailPassword;
 
 
 
@@ -54,8 +46,11 @@ public class User {
     private AppAccount appAccount = new AppAccount();*/
 
     public void addAppAccount(AppAccount appAccount){
+
         appAccount.setUser(this);
-        //ça ne save rien en db??!!!ou bien si??
+
+
+        //ça ne save rien en db??!!!ou bien si?? non je crois...
     }
     /*public void removeBankAccount(BankAccount bankAccount){
         remove(bankAccount);

@@ -42,20 +42,16 @@ public class ConnectionServiceTest {
         user1.setFirstName("John");
         user1.setLastName("Doe");
         user1.setEmail("johnY@doe.net");
-        user1.setAddress("Rue 1066 Etoa-Meki");
-        user1.setCity("Yaounde");
-        user1.setCountry("Cameroun");
-        user1.setEmailPassord("AZERT11!");
+
+        user1.setEmailPassword("AZERT11!");
 
         User user2 = new User();
         user2.setId(2);
         user2.setFirstName("Jane");
         user2.setLastName("Doe");
         user2.setEmail("janedoe234@yahoo.com");
-        user2.setAddress("5 Mohamed Gabriel St.");
-        user2.setCity("Alexandria");
-        user2.setCountry("Egypt");
-        user2.setEmailPassord("wxc0??");
+
+        user2.setEmailPassword("wxc0??");
 
         when(userService.getCurrentUsersMailAddress()).thenReturn("johnY@doe.net");
         when(userRepository.findByEmail("johnY@doe.net")).thenReturn(user1);

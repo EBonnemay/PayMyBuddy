@@ -67,7 +67,8 @@ public class AppAccount {
         private List<BankAccount> bankAccountsOfFriendsIGaveMoneyTo = new ArrayList<>();
 */
         @OneToOne(
-                //cascade = CascadeType.PERSIST,
+                //tentative ?? pour créer une entité
+                //cascade = CascadeType.ALL,//(ou PERSIST)
                 fetch = FetchType.LAZY
         )
 

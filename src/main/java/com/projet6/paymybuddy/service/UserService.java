@@ -2,19 +2,27 @@ package com.projet6.paymybuddy.service;
 
 import com.projet6.paymybuddy.model.AppAccount;
 import com.projet6.paymybuddy.model.User;
+import com.projet6.paymybuddy.repository.AppAccountRepository;
 import com.projet6.paymybuddy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
-    @Autowired
+
     private UserRepository userRepository;
+    private AppAccountRepository appAccountRepository;
+    UserService(UserRepository userRepository, AppAccountRepository appAccountRepository){
+        this. userRepository = userRepository;
+        this.appAccountRepository=appAccountRepository;
+    }
 
     public Iterable<User> getUsers() {
         return userRepository.findAll();
@@ -54,4 +62,29 @@ public String getCurrentUsersMailAddress(){
         String email = auth.getName();
         return email;
     }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    //@Override
+    public User registerNewUserAccount(User user) {
+
+        User userInDb = new User();
+
+        userInDb.setFirstName(user.getFirstName());
+        userInDb.setLastName(user.getLastName());
+
+        userInDb.setEmailPassword(passwordEncoder.encode(user.getEmailPassword()));
+
+        userInDb.setEmail(user.getEmail());
+        userRepository.save(userInDb);
+        AppAccount account = new AppAccount();
+        account.setAccountBalance(BigDecimal.valueOf(0));
+        userInDb.setAppAccount(account);
+        account.setUser(userInDb);
+
+
+        appAccountRepository.save(account);
+        return userRepository.save(userInDb);
+    }
+    //il faut aussi créer un appaccount pour cette personne, sinon la page personalPage ne s'affiche pas
 }
