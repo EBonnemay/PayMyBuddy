@@ -24,13 +24,18 @@ import java.util.Optional;
 @Service
 public class ConnectionService {
 
-    @Autowired
+
     private ConnectionRepository connectionRepository;
-    @Autowired
+
     private UserRepository userRepository;
 
-    @Autowired
     private UserService userService;
+
+    public ConnectionService(UserService userService, UserRepository userRepository, ConnectionRepository connectionRepository){
+        this.userService = userService;
+        this.userRepository= userRepository;
+        this.connectionRepository=connectionRepository;
+    }
 
     static final Logger logger = LogManager.getLogger();
 

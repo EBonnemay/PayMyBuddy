@@ -17,15 +17,20 @@ import java.util.Optional;
 @Service
 public class AppAccountService {
 
-    @Autowired
+
     private AppAccountRepository appAccountRepository;
-    @Autowired
+
     private UserRepository userRepository;
 
-    @Autowired UserService userService;
+    private UserService userService;
     //public AppAccount getAppAccount(){
        // return appAccountRepository.
     //}
+    public AppAccountService(AppAccountRepository appAccountRepository, UserRepository userRepository, UserService userService){
+        this.appAccountRepository=appAccountRepository;
+        this.userRepository=userRepository;
+        this.userService=userService;
+    }
     public Iterable<AppAccount> findAllAppAccountInTable(){
         return appAccountRepository.findAll();
     }

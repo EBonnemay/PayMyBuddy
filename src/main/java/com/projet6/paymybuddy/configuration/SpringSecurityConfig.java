@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Configuration
 public class SpringSecurityConfig  {
@@ -32,6 +33,11 @@ public class SpringSecurityConfig  {
                         "/css/**",
                         "/fonts/**",
                         "/img/**").permitAll()
+                        .requestMatchers(request -> request.getRequestURI().equals("/registerPage")).permitAll() // allow homePage without authentication
+                        //.requestMatchers(RequestMethod.GET, "/registerPage").permitAll() // allow registerPage without authentication
+                        //.requestMatchers(RequestMethod.POST, "/registerNewUser").permitAll() // allow POST to registration without authentication
+                        .requestMatchers(request -> request.getRequestURI().equals("/registerNewUser")).permitAll()
+                        .requestMatchers(request -> request.getRequestURI().equals("/logout")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin()//formulaire spring security par défaut

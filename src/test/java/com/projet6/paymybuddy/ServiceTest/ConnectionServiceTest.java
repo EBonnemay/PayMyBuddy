@@ -43,7 +43,7 @@ public class ConnectionServiceTest {
         user1.setLastName("Doe");
         user1.setEmail("johnY@doe.net");
 
-        user1.setEmailPassword("AZERT11!");
+        user1.setPassword("AZERT11!");
 
         User user2 = new User();
         user2.setId(2);
@@ -51,7 +51,7 @@ public class ConnectionServiceTest {
         user2.setLastName("Doe");
         user2.setEmail("janedoe234@yahoo.com");
 
-        user2.setEmailPassword("wxc0??");
+        user2.setPassword("wxc0??");
 
         when(userService.getCurrentUsersMailAddress()).thenReturn("johnY@doe.net");
         when(userRepository.findByEmail("johnY@doe.net")).thenReturn(user1);

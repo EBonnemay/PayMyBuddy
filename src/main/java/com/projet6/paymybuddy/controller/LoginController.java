@@ -16,10 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +51,27 @@ public class LoginController {
 
     @GetMapping("/login")
     public String displayLoginPage(){
-        System.out.println("login controller called via url will be asked to return login html page");
+        //System.out.println("login controller called via url will be asked to return login html page");
         return "login";
     }
+    @GetMapping("/homePage")
+    public String displayhomePage(){
+        //System.out.println("login controller called via url will be asked to return login html page");
+        return "homePage";
+    }
+
+    @GetMapping("/registerPage")
+    public String displayRegisterPage() {
+        return "registerPage";
+    }
+    @PostMapping("/registerNewUser")
+    public String registerUser(@RequestParam("first_name") String firstName, @RequestParam("last_name")String lastName, @RequestParam("email") String email, @RequestParam("password") String password){
+        System.out.println("in controller to register user");
+        User newUser = userService.registerNewUserAccount(firstName, lastName, email, password);
+        System.out.println("user's first name is "+ newUser.getFirstName());
+        return "login";
+    }
+
 
     @GetMapping("/logout")
     public String displayLoginPageFromLogout(){
@@ -122,6 +137,8 @@ public String displayTransactionPage( Model model) {
 
        Optional<AppAccount> opt  = appAccountService.getAppAccountById(Integer.parseInt(id));
        AppAccount appAccount = opt.get();
+       User user = appAccount.getUser();
+       model.addAttribute("name", user.getFirstName()+" "+user.getLastName());
        model.addAttribute("myappaccount", appAccount);
         return "update_appaccount";
     }

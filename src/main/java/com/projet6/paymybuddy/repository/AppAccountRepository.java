@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppAccountRepository extends CrudRepository<AppAccount, Integer> {
     boolean existsAppAccountByUser(User user);
+
 }

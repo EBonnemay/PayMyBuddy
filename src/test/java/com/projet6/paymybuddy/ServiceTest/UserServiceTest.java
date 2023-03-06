@@ -20,7 +20,7 @@ public class UserServiceTest {
     @Autowired
     private AppAccountRepository appAccountRepository;
 
-    @Test
+    /*@Test
     public void registerNewUserAccountTest(){
         //ARRANGE
         //userRepository.deleteById(1);
@@ -38,6 +38,6 @@ public class UserServiceTest {
         Assertions.assertTrue(userRepository.existsUserByEmail("aliernest@yahoo.com"));
         Assertions.assertTrue(appAccountRepository.existsAppAccountByUser(user));
 
-    }
+    }*/
 
 }

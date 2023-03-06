@@ -25,16 +25,24 @@ import java.util.Optional;
 
 @Service
 public class TransactionService {
-    @Autowired
+
     private TransactionRepository transactionRepository;
-    @Autowired
+
     private UserRepository userRepository;
 
-    @Autowired
+
     private UserService userService;
 
-    @Autowired
+
     private AppAccountRepository appAccountRepository;
+
+    public TransactionService(TransactionRepository transactionRepository, UserService userService, UserRepository userRepository, AppAccountRepository appAccountRepository){
+        this.transactionRepository= transactionRepository;
+        this.userService=userService;
+        this.userRepository = userRepository;
+        this.appAccountRepository=appAccountRepository;
+
+    }
 
     static final Logger logger = LogManager.getLogger();
     public Iterable<Transaction> getTransactions(){

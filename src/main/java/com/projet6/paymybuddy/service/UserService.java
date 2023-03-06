@@ -21,7 +21,8 @@ public class UserService {
     private AppAccountRepository appAccountRepository;
     UserService(UserRepository userRepository, AppAccountRepository appAccountRepository){
         this. userRepository = userRepository;
-        this.appAccountRepository=appAccountRepository;
+        this.appAccountRepository=appAccountRepository;//?? faut-il mettre le repo appaccount en paramètre du userService?
+
     }
 
     public Iterable<User> getUsers() {
@@ -34,7 +35,7 @@ public class UserService {
         return user;
     }
 
-    public User addUser(User user) {
+   /*public User addUser(User user) {
         return userRepository.save(user);
     }
 
@@ -45,7 +46,7 @@ public class UserService {
     public void deleteUserById(int Id) {
         userRepository.deleteById(Id);
 
-    }
+    }*/
 
     public AppAccount getAppAccountOfConnectedUser() {
     String email = getCurrentUsersMailAddress();
@@ -66,25 +67,29 @@ public String getCurrentUsersMailAddress(){
     private PasswordEncoder passwordEncoder;
 
     //@Override
-    public User registerNewUserAccount(User user) {
+    public User registerNewUserAccount(String firstName, String lastName, String email, String password ) {
 
-        User userInDb = new User();
+        User user = new User();
 
-        userInDb.setFirstName(user.getFirstName());
-        userInDb.setLastName(user.getLastName());
+        user.setFirstName(firstName);
 
-        userInDb.setEmailPassword(passwordEncoder.encode(user.getEmailPassword()));
+        user.setLastName(lastName);
+       user.setPassword(passwordEncoder.encode(password));
+       user.setEmail(email);
 
-        userInDb.setEmail(user.getEmail());
-        userRepository.save(userInDb);
+        userRepository.save(user);
+
         AppAccount account = new AppAccount();
         account.setAccountBalance(BigDecimal.valueOf(0));
-        userInDb.setAppAccount(account);
-        account.setUser(userInDb);
 
-
+        //account.set
+        account.setUser(user);
         appAccountRepository.save(account);
-        return userRepository.save(userInDb);
+        //user.setAppAccount(account);//sert à rien? avant de faire le setUp accountsave account.sauver account avant
+
+        userRepository.save(user);
+
+        return user;
     }
     //il faut aussi créer un appaccount pour cette personne, sinon la page personalPage ne s'affiche pas
 }

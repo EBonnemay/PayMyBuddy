@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -45,11 +46,13 @@
         <td colspan="3">Aucun compte enregistré</td>
     </tr>-->
     <tr >
-        <td>my account number </span></td>
-        <td><span th:text="${myappaccount.iban}"></span></td>
+        <td>account's owner</span></td>
+        <td><span th:text="${name} "></span></td>
+
+
 
     </tr>
-    <td>my actual balance </span></td>
+    <td>actual balance </span></td>
     <td><span th:text="${myappaccount.accountBalance}"></span></td>
     </tbody>
 </table>

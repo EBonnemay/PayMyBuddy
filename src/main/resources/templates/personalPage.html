@@ -128,9 +128,8 @@
                         <td colspan="3">Aucun compte enregistré</td>
                     </tr>-->
                     <tr>
-                        <td><span th:text="${myappaccount.iban}"></span></td>
                         <td><span th:text="${myappaccount.accountBalance}"></span></td>
-                        <td><span><a th:href="@{/deleteAppAccount}">Delete appAccount</a></span></td>
+
                         <td><span><a
                                 th:href="@{/updateAppAccount(id=${myappaccount.id})}">Update account balance</a></span>
                         </td>
