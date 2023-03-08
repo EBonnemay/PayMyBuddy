@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>profile</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+<header>
+  <div class="text-center bg-white border-bottom">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 bg-success d-flex align-items-center justify-content-center" >
+          <p class="text-white " style="padding-top:5px">Pay My Buddy</p>
+        </div>
+        <div class="col-md-10 bg-white d-flex align-items-center justify-content-end">
+
+          <ul class="navbar-nav flex-row">
+            <li class="nav-item me-2 me-lg-0 mr-4">
+              <a class="nav-link" href="/personalPage">Home</a>
+            </li>
+            <li class="nav-item me-2 me-lg-0 mr-4">
+              <a class="nav-link" href="/transactions">Transfer</a>
+            </li>
+            <li class="nav-item me-2 me-lg-0 mr-4">
+              <p class="nav-link" href="/profile">Profile</p>
+            </li>
+            <li class="nav-item me-2 me-lg-0 mr-4">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+            <li class="nav-item me-2 me-lg-0">
+              <a class="nav-link" href="/logout">Log off</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+<main>
+  <section class="py-5 px-5">
+
+    <table class="table table-striped">
+      <!-- pas d'entête thead * th:object="${target}"-->
+
+      <tbody>
+      <!-- ne pas corriger les warnings IntelliJ sur les expressions spel -->
+      <!---<tr th:if="${myappaccount==null}">
+          <td colspan="3">Aucun compte enregistré</td>
+      </tr>-->
+      <tr >
+        <td>account's owner</span></td>
+        <td><span th:text="${name} "></span></td>
+      </tr>
+      <tr>
+        <td>email</span></td>
+        <td><span th:text="${email} "></span></td>
+      </tr>
+      <tr>
+        <td>status</span></td>
+        <td><span th:text="${status} "></span></td>
+      </tr>
+      <tr>
+      <td>actual balance </span></td>
+        <td><span th:text="${balance}"></span></td></tr>
+      </tbody>
+    </table>
+    <div class="py-5 px-5">
+    <form th:action="@{/unsubscribe}" method="post"> <!---il s’agit ici de traiter la validation d’un formulaire, et généralement les formulaires exécutent des requêtes POST.-->
+      <!---<label for="username">Username</label>:légende pour objet d'une interface utilisateur-->
+
+      <button class="btn btn-primary" type="submit">unsubscribe</button>
+
+    </form>
+  </div>
+    <!--<form action = "#" th:action="@{/save}" th:object="${appaccount}" method="post">
+
+        <label > iban:</label>
+        <input type="text" th:field="*{iban}" class="form-control" placeholder="new balance">
+
+        <label > balance: </label>
+        <input type="number" th:field="*{accountBalance}" class="form-control" placeholder="new balance">
+        <button type = "submit" class="btn-primary btn-block">Submit</button>
+    </form>-->
+  </section>
+</main>
+<footer></footer>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

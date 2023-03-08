@@ -33,7 +33,7 @@ public class SpringSecurityConfig  {
                         "/css/**",
                         "/fonts/**",
                         "/img/**").permitAll()
-                        .requestMatchers(request -> request.getRequestURI().equals("/registerPage")).permitAll() // allow homePage without authentication
+                        .requestMatchers(request -> request.getRequestURI().equals("/registrationPage")).permitAll() // allow homePage without authentication
                         //.requestMatchers(RequestMethod.GET, "/registerPage").permitAll() // allow registerPage without authentication
                         //.requestMatchers(RequestMethod.POST, "/registerNewUser").permitAll() // allow POST to registration without authentication
                         .requestMatchers(request -> request.getRequestURI().equals("/registerNewUser")).permitAll()

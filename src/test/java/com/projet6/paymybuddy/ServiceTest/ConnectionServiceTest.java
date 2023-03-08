@@ -60,7 +60,7 @@ public class ConnectionServiceTest {
         when(userRepository.findByEmail("janedoe234@yahoo.com")).thenReturn(user2);
 
         //ACT
-        connectionService.saveConnectionForCurrentUserWithEmailParameter("janedoe234@yahoo.com");
+        connectionService.saveNewConnectionForCurrentUserWithEmailParameter("janedoe234@yahoo.com");
         //ASSERT
         assertEquals(connectionRepository.count(),1);
     }

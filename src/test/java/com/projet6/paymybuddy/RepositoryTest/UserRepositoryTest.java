@@ -11,6 +11,7 @@ import com.projet6.paymybuddy.repository.UserRepository;
 import com.projet6.paymybuddy.service.UserService;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -19,11 +20,6 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource("/application-test.properties")
 public class UserRepositoryTest {
 
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
     UserRepository userRepository;
 
 
@@ -31,10 +27,10 @@ public class UserRepositoryTest {
         //arrange
 
         //act
-        User user1=  userRepository.findByEmail("johnY@doe.net");
+        User user1=  userRepository.findByEmail("jane@doe.net");
 
         //assert
-        assertEquals(user1.getFirstName(), "John");
+        assertEquals(user1.getFirstName(), "Jane");
 
     }
 

@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.Boolean.FALSE;
+
 @Service
 public class ConnectionService {
 
@@ -76,14 +78,13 @@ public class ConnectionService {
             logger.info("connection with user "+ emailOfUserToRemoveFromConnection + " deleted successfully");
 
     }
-    public Connection saveConnectionForCurrentUserWithEmailParameter(String friendEmail) {
+    public Connection saveNewConnectionForCurrentUserWithEmailParameter(String friendEmail) {
         Connection newConnection = new Connection();
         List<MyException> listOfConnectionExceptions = new ArrayList<>();
 
         String email = userService.getCurrentUsersMailAddress();
         User author = userRepository.findByEmail(email);
-
-
+        //si le mail ne se trouve pas dans la base ou input nul
         try {
             if (userRepository.findByEmail(friendEmail)==null) {
                 String message = "you must enter an email address";
@@ -97,7 +98,19 @@ public class ConnectionService {
             return newConnection;
         }
         User target = userRepository.findByEmail(friendEmail);
-
+        //si l'utilisateur "target" est deleted
+        try {
+            if (target.isDeleted()) {
+                String message = "this user is deleted";
+                MyException exception = new MyException(message);
+                logger.debug("user input error : this user is deleted");
+                throw exception;
+            }
+        }catch(MyException exception) {
+                listOfConnectionExceptions.add(exception);
+                newConnection.setExceptions(listOfConnectionExceptions);
+                return newConnection;
+        }
         int authorId = author.getId();
         int targetId = target.getId();
 
@@ -105,6 +118,7 @@ public class ConnectionService {
         Iterator<Integer> iterator = iterable.iterator();
         List<Integer> friendsIds = new ArrayList<Integer>();
         iterable.forEach(friendsIds::add);
+        //si l'ami est déjà dans la liste
         try {
             if (friendsIds.contains(targetId)) {
                 String message = "friend already in list";
@@ -126,7 +140,7 @@ public class ConnectionService {
     }
 
     //cette méthode fournit la liste déroulante d'amis
-        public List<User> getFriendsUsersOfConnectedUser () {
+        public List<User> getActualOrFormerFriendsUsersOfConnectedUser () {
             String email = userService.getCurrentUsersMailAddress();
 
             List<User> friends = new ArrayList();
@@ -142,7 +156,27 @@ public class ConnectionService {
         }
         //récupérer l'id de l'utilisateur connecté et injecter en param ICI
         //récupérer utilisateur connecté couramment
-        public Iterable<String> getNamesOfFriendsForPrincipalUSer () {
+
+    public ArrayList<User> getNonDeletedFriendsUsersOfConnectedUser () {
+        String email = userService.getCurrentUsersMailAddress();
+
+        ArrayList<User> friends = new ArrayList();
+        System.out.println("friends about to be retrived from auth");
+        Iterable<Integer> listOfIds = getFriendsIdsForOneUserByEmail(email);
+        for (Integer id : listOfIds) {
+            Optional<User> optUser = userRepository.findById(id);
+            User user = optUser.get();
+            if(!user.isDeleted()){
+                System.out.print("this is user friend not deleted "+ user.getFirstName());
+                friends.add(user);
+            }
+
+        }
+
+
+        return friends ;
+    }
+    public Iterable<String> getNamesOfFriendsForPrincipalUSer () {
             String email = userService.getCurrentUsersMailAddress();
 
             List<String> listOfFriendsNames = new ArrayList();

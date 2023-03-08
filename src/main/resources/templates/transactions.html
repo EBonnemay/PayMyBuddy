@@ -61,7 +61,7 @@
                             <p class="nav-link" href="#">transfer</p>
                         </li>
                         <li class="nav-item me-2 me-lg-0 mr-4">
-                            <a class="nav-link" href="/personalPage">Profile</a>
+                            <a class="nav-link" href="/profile">Profile</a>
                         </li>
                         <li class="nav-item me-2 me-lg-0 mr-4">
                             <a class="nav-link" href="#">Contact</a>
@@ -99,10 +99,11 @@
     <row>
         <div class="d-flex justify-content-between " style="padding-top:20px">
             <p style="padding-top:10px"> Send Money</p>
-            <!--<li class="nav-item">
-                <a class="nav-link" href="/logout">Log Out</a>
-            </li>-->
-            <button class="btn btn-primary" >Add Connection</button>
+            <form th:action="@{/personalPage}" method="get">
+
+                <button class="btn btn-primary" >Add Connection</button>
+            </form>
+
         </div>
     </row>
     <row>
@@ -112,19 +113,19 @@
 
 
                         <div class="mx-2">
-                            <select name="email">
+                            <select id="email" name="email">
                                 <option value="" disabled selected>Select A Connection
                                 </option>
-                                <option th:each="friend : ${myFriends}"
-                                            th:text="${friend.email}">
+                                <option th:each="user : ${myFriends}"
+                                            th:value="${user.email}"
+                                            th:text="${user.email}">
                                 </option>
+                            </select>
                                 <div th:if="${not #lists.isEmpty(transactionError)}">
                                     <ul>
                                         <li th:each="error : ${transactionError}" th:text="${error.message}"></li>
                                     </ul>
                                 </div>
-
-                            </select>
                         </div>
                         <div class = "mx-2" >
                             <input type="number" step="0.01" id="amount" name="amount" path="amount" placeholder="Enter Amount"/>

@@ -6,6 +6,7 @@ import com.projet6.paymybuddy.model.User;
 
 import java.util.Optional;
 
+import com.projet6.paymybuddy.repository.UserRepository;
 import com.projet6.paymybuddy.service.AppAccountService;
 import com.projet6.paymybuddy.service.TransactionService;
 import com.projet6.paymybuddy.service.ConnectionService;
@@ -25,9 +26,13 @@ public class GeneralRequestsController {
     @Autowired
     private ConnectionService connectionService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public void printEmailOfEveryUser() {
         /** print the email of every user*/
-        Iterable<User> users = userService.getUsers();
+        Iterable<User> users = userRepository.findAll();
+
         users.forEach(user -> System.out.println(user.getEmail()));//print email de chaque objet
     }
 

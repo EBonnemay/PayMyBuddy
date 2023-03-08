@@ -22,10 +22,10 @@
                             <p class="nav-link" href="#">Home</p>
                         </li>
                         <li class="nav-item me-2 me-lg-0 mr-4">
-                            <p class="nav-link" href="/transactions">transfer</p>
+                            <a class="nav-link" href="/transactions">Transfer</a>
                         </li>
                         <li class="nav-item me-2 me-lg-0 mr-4">
-                            <a class="nav-link" href="#">Profile</a>
+                            <a class="nav-link" href="/profile">Profile</a>
                         </li>
                         <li class="nav-item me-2 me-lg-0 mr-4">
                             <a class="nav-link" href="#">Contact</a>
@@ -74,10 +74,10 @@
 
                     <tbody>
                     <!-- ne pas corriger les warnings IntelliJ sur les expressions spel -->
-                    <tr th:if="${myfriends.empty}">
+                    <tr th:if="${myNonDeletedFriends.empty}">
                         <td colspan="3">Aucun ami enregistré</td>
                     </tr>
-                    <tr th:each="user: ${myfriends}">
+                    <tr th:each="user: ${myNonDeletedFriends}">
                         <td><span th:text="${user.firstName}"></span></td>
                         <td><span th:text="${user.lastName}"></span></td>
                         <td><span th:text="${user.email}"></span></td>

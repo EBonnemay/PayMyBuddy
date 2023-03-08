@@ -2,6 +2,7 @@ package com.projet6.paymybuddy.controller;
 
 import com.projet6.paymybuddy.model.*;
 import com.projet6.paymybuddy.repository.AppAccountRepository;
+import com.projet6.paymybuddy.repository.UserRepository;
 import com.projet6.paymybuddy.service.AppAccountService;
 import com.projet6.paymybuddy.service.ConnectionService;
 import com.projet6.paymybuddy.service.TransactionService;
@@ -13,6 +14,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,13 +41,20 @@ public class LoginController {
     //transformer le get personal Page en post??,
 
     static final Logger logger = LogManager.getLogger();
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private AppAccountRepository appAccountRepository;
+
     @GetMapping("/personalPage")//url sur lequel répond la méthode
     public String displayPersonalPage(Model model){
         //final UserDetails currentUserDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
         //<Integer>friendsId = connectionRepository.findFriendsIdsForOneUser(1);
         //Page<User> friendsPage = friends.findAll(PageRequest.of(0,5));
-        model.addAttribute("myfriends", connectionService.getFriendsUsersOfConnectedUser());
+        //model.addAttribute("myFriends", connectionService.getActualOrFormerFriendsUsersOfConnectedUser());
+        model.addAttribute("myNonDeletedFriends", connectionService.getNonDeletedFriendsUsersOfConnectedUser());
         model.addAttribute("myappaccount", userService.getAppAccountOfConnectedUser() );
+
         System.out.println("personal page page fulfilled, about to display");
         return "personalPage";
     }
@@ -60,7 +70,7 @@ public class LoginController {
         return "homePage";
     }
 
-    @GetMapping("/registerPage")
+    @GetMapping("/registrationPage")
     public String displayRegisterPage() {
         return "registerPage";
     }
@@ -83,9 +93,12 @@ public class LoginController {
         return "redirect:/personalPage";
     }
     @PostMapping("/addFriend")
-    public String addConnectionAndRedirectPersonalPage(@RequestParam("email") String email, Model model) {
-        Connection connection = connectionService.saveConnectionForCurrentUserWithEmailParameter(email);
-        model.addAttribute("myfriends", connectionService.getFriendsUsersOfConnectedUser());
+    public String addConnectionAndRedirectPersonalPage(@RequestParam(name="email", required=false) String email, Model model) {
+        Connection connection = connectionService.saveNewConnectionForCurrentUserWithEmailParameter(email);
+        //List<MyException> list = new ArrayList<>();
+        //connection.setExceptions(list);
+        //System.out.println(connection.getExceptions().size());
+        model.addAttribute("myNonDeletedFriends", connectionService.getNonDeletedFriendsUsersOfConnectedUser());
         model.addAttribute("myappaccount", userService.getAppAccountOfConnectedUser() );
         model.addAttribute("connectionError", connection.getExceptions());
         if(connection.getExceptions()!=null){
@@ -93,8 +106,8 @@ public class LoginController {
                 String message = exception.getMessage();
             }
         }
-        return "personalPage";
-
+        return "/personalPage";
+//?? ou redirect???
         //si connectionService.saveCOnnection a échoué, renvoyer
     }
     @GetMapping("/deleteFriend")
@@ -120,18 +133,56 @@ public class LoginController {
 
     @GetMapping("/transactions")
 
-public String displayTransactionPage( Model model) {
+public String displayTransactionPage(Model model) {
     //ici ajouter un paramètre booléen pour signaler si erreur +
         // number of transactions to display per page
      model.addAttribute("myTransactions", transactionService.getConnectedUsersTransactions());
-     model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
-     //model.addAttribute("lastTransaction", )
-    //model.addAttribute("transactionError", "Transaction amount cannot be negative.");
+     //le code ci dessous affiche les amis en première intention
+     List<User> listOfFriends = connectionService.getActualOrFormerFriendsUsersOfConnectedUser();
+     List<User>listOfNonDeletedFriends = new ArrayList<>();
+     for (User user : listOfFriends){
+         if(!user.isDeleted()){
+             listOfNonDeletedFriends.add(user);
+         }
+     }
+    model.addAttribute("myFriends", listOfNonDeletedFriends);
 
-    return "/transactions";
+        //cet appel n'affiche pas les amis en première intention//
+    /* model.addAttribute("myFriends ", connectionService.getNonDeletedFriendsUsersOfConnectedUser());
+        for (User user : connectionService.getNonDeletedFriendsUsersOfConnectedUser()){
+            System.out.println(user.getFirstName());
+        }*/
+     //model.addAttribute("lastTransaction", )
+        //List <MyException> list = new ArrayList<>();
+   // model.addAttribute("transactionError", list);
+
+    return "transactions";
 }
 
+    @GetMapping("/profile")
+    public String displayProfilePage(Model model) {
 
+        String email = userService.getCurrentUsersMailAddress();
+        User currentUser = userRepository.findByEmail(email);
+        model.addAttribute( model.addAttribute("name", currentUser.getFirstName()+" "+currentUser.getLastName()));;
+        if(!currentUser.isDeleted()){
+            model.addAttribute("status", "utilisateur inscrit");
+        }
+        else {
+            model.addAttribute("status", "non inscrit");
+        }
+        model.addAttribute("email", email);
+        model.addAttribute("balance", currentUser.getAppAccount().getAccountBalance());
+        return "profile";
+    }
+    @PostMapping("/unsubscribe")
+    public String unsubscribe(){
+        String email = userService.getCurrentUsersMailAddress();
+        User currentUser = userRepository.findByEmail(email);
+        currentUser = userService.markUserAsDeleted(currentUser);
+        return("redirect:/login");
+
+    }
     @GetMapping("/updateAppAccount")
     public String displayUpdateAppAccountPage(@RequestParam("id") String id, Model model) {
 
@@ -171,7 +222,8 @@ public String displayTransactionPage( Model model) {
         Transaction transaction = transactionService.makeANewTransaction(email,  amount, description);
 
             model.addAttribute("myTransactions", transactionService.getConnectedUsersTransactions());
-            model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
+            model.addAttribute("myFriends", connectionService.getNonDeletedFriendsUsersOfConnectedUser());
+
 
             model.addAttribute("transactionError", transaction.getExceptions());
             if(transaction.getExceptions()!=null){
@@ -179,9 +231,7 @@ public String displayTransactionPage( Model model) {
                     String message = exception.getMessage();
                 }
             }
-
             return "/transactions";
-
     }
 
 

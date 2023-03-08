@@ -19,15 +19,18 @@ public class UserService {
 
     private UserRepository userRepository;
     private AppAccountRepository appAccountRepository;
-    UserService(UserRepository userRepository, AppAccountRepository appAccountRepository){
+
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, AppAccountRepository appAccountRepository, PasswordEncoder passwordEncoder){
         this. userRepository = userRepository;
         this.appAccountRepository=appAccountRepository;//?? faut-il mettre le repo appaccount en paramètre du userService?
-
+        this.passwordEncoder=passwordEncoder;
     }
 
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
-    }
+    //public Iterable<User> getUsers() {
+        //return userRepository.findAll();
+    //}
 
     public User getUserById(int id) {
         Optional<User> optUser = userRepository.findById(id);
@@ -51,20 +54,19 @@ public class UserService {
     public AppAccount getAppAccountOfConnectedUser() {
     String email = getCurrentUsersMailAddress();
     User user = userRepository.findByEmail(email);
-   AppAccount appAccount = user.getAppAccount();
+    AppAccount appAccount = user.getAppAccount();
 
     return appAccount;
 }
-public User getUserFromEmail(String email){
-        return userRepository.findByEmail(email);
-}
+//public User getUserFromEmail(String email){
+        //return userRepository.findByEmail(email);
+//}
 public String getCurrentUsersMailAddress(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         return email;
     }
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
 
     //@Override
     public User registerNewUserAccount(String firstName, String lastName, String email, String password ) {
@@ -76,7 +78,7 @@ public String getCurrentUsersMailAddress(){
         user.setLastName(lastName);
        user.setPassword(passwordEncoder.encode(password));
        user.setEmail(email);
-
+        user.setDeleted(false);
         userRepository.save(user);
 
         AppAccount account = new AppAccount();
@@ -89,6 +91,11 @@ public String getCurrentUsersMailAddress(){
 
         userRepository.save(user);
 
+        return user;
+    }
+    public User markUserAsDeleted(User user){
+        user.setDeleted(true);
+        userRepository.save(user);
         return user;
     }
     //il faut aussi créer un appaccount pour cette personne, sinon la page personalPage ne s'affiche pas

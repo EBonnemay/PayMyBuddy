@@ -31,6 +31,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
 
 
     @OneToOne(mappedBy = "user")
@@ -45,13 +48,13 @@ public class User {
     )
     private AppAccount appAccount = new AppAccount();*/
 
-    public void addAppAccount(AppAccount appAccount){
+    //public void addAppAccount(AppAccount appAccount){
 
-        appAccount.setUser(this);
+       // appAccount.setUser(this);
 
 
         //ça ne save rien en db??!!!ou bien si?? non je crois...
-    }
+   // }
     /*public void removeBankAccount(BankAccount bankAccount){
         remove(bankAccount);
         bankAccount.setUser(this);*/
