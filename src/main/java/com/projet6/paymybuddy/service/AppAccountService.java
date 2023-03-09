@@ -34,63 +34,27 @@ public class AppAccountService {
     public Iterable<AppAccount> findAllAppAccountInTable(){
         return appAccountRepository.findAll();
     }
-    public Optional<AppAccount> getAppAccountById(Integer id){
-        return appAccountRepository.findById(id);
+    public AppAccount getAppAccountById(Integer id){
+        Optional<AppAccount> optAppAccount = appAccountRepository.findById(id);
+        AppAccount appAccount = optAppAccount.get();
+        return appAccount;
     }
-    /*public Optional<BankAccount> getPrincipalBankAccountByEmail(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        User user = userRepository.findByEmail(email);
-        int id = user.getId();
-        List<BankAccount> listOfBankAccounts = new ArrayList<>();
-        Optional<BankAccount> optList = getBankAccountById(id);
-        listOfBankAccounts = optList.get();
-
-        //JE CONFONDS ID USER ET ID BANKACCOUNTS
-    }*/
-    public AppAccount getAppAccountOfConnectedUser(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication ok, called auth - here auth is email");
-        String email = auth.getName();
-        User user = userRepository.findByEmail(email);
-        return user.getAppAccount();
-    }
-
-    public AppAccount addAppAccount(AppAccount appAccount){return appAccountRepository.save(appAccount);}
-    public void deleteAppAccountOfConnectedUser() {
-
-        //récupérer le mail authentifiant de la session courante, puis l'utilisateur associé, puis son compte
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        System.out.println(email);
-        User connectedUser = userRepository.findByEmail(email);
-        AppAccount appAccount = connectedUser.getAppAccount();
-        appAccountRepository.delete(appAccount);
-
-        System.out.println("authentication ok, called auth - here auth is email");
+   // public AppAccount addAppAccount(AppAccount appAccount){return appAccountRepository.save(appAccount);}
 
 
-    }
+
+
+
     public void setConnectedAccountToZero(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        System.out.println(email);
+        String email = userService.getCurrentUsersMailAddress();
         User connectedUser = userRepository.findByEmail(email);
         AppAccount appAccount = connectedUser.getAppAccount();
         appAccount.setAccountBalance(BigDecimal.valueOf(0));
         appAccountRepository.save(appAccount);
     }
-    /*public void setAccountToZero(int idOfCount){
 
-        Optional<AppAccount> opt = appAccountRepository.findById(idOfCount);
-        AppAccount appAccount = opt.get();
-        appAccount.setAccountBalance(BigDecimal.valueOf(0));
-        appAccountRepository.save(appAccount);
-    }*/
     public void withdrawMoneyFromConnectedAccount(String currency_field_withdraw){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        System.out.println(email);
+        String email = userService.getCurrentUsersMailAddress();
         User connectedUser = userRepository.findByEmail(email);
         AppAccount appAccount = connectedUser.getAppAccount();
         BigDecimal currentBalance = appAccount.getAccountBalance();

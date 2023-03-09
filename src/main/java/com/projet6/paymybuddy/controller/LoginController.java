@@ -87,11 +87,7 @@ public class LoginController {
     public String displayLoginPageFromLogout(){
         return "login";
     }
-    @GetMapping("/deleteAppAccount")
-    public String deleteAppAccountAndRedirectPersonalPage(){
-        appAccountService.deleteAppAccountOfConnectedUser();
-        return "redirect:/personalPage";
-    }
+
     @PostMapping("/addFriend")
     public String addConnectionAndRedirectPersonalPage(@RequestParam(name="email", required=false) String email, Model model) {
         Connection connection = connectionService.saveNewConnectionForCurrentUserWithEmailParameter(email);
@@ -186,8 +182,8 @@ public String displayTransactionPage(Model model) {
     @GetMapping("/updateAppAccount")
     public String displayUpdateAppAccountPage(@RequestParam("id") String id, Model model) {
 
-       Optional<AppAccount> opt  = appAccountService.getAppAccountById(Integer.parseInt(id));
-       AppAccount appAccount = opt.get();
+        AppAccount appAccount  = appAccountService.getAppAccountById(Integer.parseInt(id));
+
        User user = appAccount.getUser();
        model.addAttribute("name", user.getFirstName()+" "+user.getLastName());
        model.addAttribute("myappaccount", appAccount);

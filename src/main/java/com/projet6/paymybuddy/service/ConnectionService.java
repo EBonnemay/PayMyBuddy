@@ -33,25 +33,27 @@ public class ConnectionService {
 
     private UserService userService;
 
+    static final Logger logger = LogManager.getLogger();
+
     public ConnectionService(UserService userService, UserRepository userRepository, ConnectionRepository connectionRepository){
         this.userService = userService;
         this.userRepository= userRepository;
         this.connectionRepository=connectionRepository;
     }
 
-    static final Logger logger = LogManager.getLogger();
 
-    public Iterable<Connection> getConnections() {
+
+    /*public Iterable<Connection> getConnections() {
         return connectionRepository.findAll();
-    }
+    }*/
 
-    public Optional<Connection> getConnectionById(Integer id) {
+    /*public Optional<Connection> getConnectionById(Integer id) {
         return connectionRepository.findById(id);
-    }
+    }*/
 
-    public Connection addConnection(Connection connection) {
+    /*public Connection addConnection(Connection connection) {
         return connectionRepository.save(connection);
-    }
+    }*/
 
     public Iterable<Integer> getFriendsIdsForOneUserById(int id) {
         return connectionRepository.findFriendsIdsForOneUser(id);
@@ -63,9 +65,9 @@ public class ConnectionService {
         return getFriendsIdsForOneUserById(id);
     }
 
-    public void saveConnection(Connection connection) {
+    /*public void saveConnection(Connection connection) {
         connectionRepository.save(connection);
-    }
+    }*/
     @Transactional
     public void deleteConnection(String emailOfUserToRemoveFromConnection){
         //try{
@@ -176,19 +178,7 @@ public class ConnectionService {
 
         return friends ;
     }
-    public Iterable<String> getNamesOfFriendsForPrincipalUSer () {
-            String email = userService.getCurrentUsersMailAddress();
 
-            List<String> listOfFriendsNames = new ArrayList();
-//>>
-            Iterable<Integer> listOfIds = getFriendsIdsForOneUserByEmail(email);
-            for (Integer id : listOfIds) {
-                Optional<User> optUser = userRepository.findById(id);
-                User user = optUser.get();
-                listOfFriendsNames.add(user.getFirstName() + " " + user.getLastName());
-            }
-            return listOfFriendsNames;
-        }
 
 
 }

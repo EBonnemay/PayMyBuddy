@@ -85,9 +85,8 @@ public class GeneralRequestsController {
          * print the amount of money on bankaccount with id 2
          */
 
-        Optional<AppAccount> optAppAccount = appAccountService.getAppAccountById(2);
-        AppAccount appAccountId2 = optAppAccount.get();
-        System.out.println(appAccountId2.getAccountBalance());
+        AppAccount AppAccount = appAccountService.getAppAccountById(2);
+
     }
 
     /* public void firstNameAndIbanAndBankAccountIdOfPersonsWhoGAveMoneyToId2(){
@@ -128,8 +127,8 @@ public class GeneralRequestsController {
         Optional<Transaction> optTransaction = transactionService.getTransactionById(1);
         Transaction transactionId1 = optTransaction.get();
         int giverAccountId = transactionId1.getDebitedAccount().getId();
-        Optional<AppAccount> optBank = appAccountService.getAppAccountById(giverAccountId);//je pourrais aussi faire un lien direct transaction user.
-        AppAccount giverAccount = optBank.get();
+        AppAccount giverAccount = appAccountService.getAppAccountById(giverAccountId);//je pourrais aussi faire un lien direct transaction user.
+        //AppAccount giverAccount = optBank.get();
         System.out.println("giver of first transaction is " + giverAccount.getUser().
 
                 getFirstName());

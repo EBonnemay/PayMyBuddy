@@ -28,9 +28,6 @@ public class UserService {
         this.passwordEncoder=passwordEncoder;
     }
 
-    //public Iterable<User> getUsers() {
-        //return userRepository.findAll();
-    //}
 
     public User getUserById(int id) {
         Optional<User> optUser = userRepository.findById(id);
@@ -38,18 +35,7 @@ public class UserService {
         return user;
     }
 
-   /*public User addUser(User user) {
-        return userRepository.save(user);
-    }
 
-    public void deleteUser(User user) {
-        userRepository.delete(user);
-    }
-
-    public void deleteUserById(int Id) {
-        userRepository.deleteById(Id);
-
-    }*/
 
     public AppAccount getAppAccountOfConnectedUser() {
     String email = getCurrentUsersMailAddress();
@@ -58,12 +44,12 @@ public class UserService {
 
     return appAccount;
 }
-//public User getUserFromEmail(String email){
-        //return userRepository.findByEmail(email);
-//}
+
 public String getCurrentUsersMailAddress(){
+        //Authentication auth = getAuthentication();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
+
         return email;
     }
 
@@ -98,5 +84,6 @@ public String getCurrentUsersMailAddress(){
         userRepository.save(user);
         return user;
     }
-    //il faut aussi créer un appaccount pour cette personne, sinon la page personalPage ne s'affiche pas
+
+
 }

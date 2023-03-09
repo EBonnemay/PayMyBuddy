@@ -12,10 +12,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +37,10 @@ public class UserServiceTest {
     private AppAccountRepository appAccountRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
+    //@Mock
+    //private SecurityContextHolder securityContextHolder;
+    @Mock
+    private Authentication auth;
 
     private UserService userService;
 
@@ -40,6 +48,54 @@ public class UserServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         userService = new UserService(userRepository, appAccountRepository, passwordEncoder);
+    }
+
+    //
+    @Test
+    public void getUserByIdTest() {
+        User user = new User();
+        when(userRepository.findById(2)).thenReturn(Optional.of(user));
+
+        User foundUser = userService.getUserById(2);
+
+        verify(userRepository,times(1)).findById(2);
+        assertEquals(user, foundUser);
+
+
+    }
+    @Test
+    public void getAppAccountOfConnectedUserTest(){
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        User user = new User();
+        String firstName = "John";
+        String lastName = "Doe";
+        String email = "johndoe@example.com";
+        String password = "password";
+        //String name = "johndoe@example.com";
+        AppAccount johns_account = user.getAppAccount();
+        when(auth.getName()).thenReturn(email);
+        when(userRepository.findByEmail(email)).thenReturn(user);
+
+        AppAccount appaccount = userService.getAppAccountOfConnectedUser();
+
+        verify(auth, times(1)).getName();
+        verify(userRepository, times(1)).findByEmail(email);
+        assertEquals(johns_account, appaccount);
+
+
+
+    }
+    @Test
+    public void getCurrentUsersMailAddressTest(){
+
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        when(auth.getName()).thenReturn("test@test.com");
+
+        String requiredMail = userService.getCurrentUsersMailAddress();
+
+        assertEquals("test@test.com", requiredMail );
+
 
     }
     @Test
@@ -83,131 +139,8 @@ public class UserServiceTest {
         user = userService.markUserAsDeleted(user);
         //ASSERT
         assertTrue(user.isDeleted());
+        //pourquoi userRepo peut il être appelé sans renvoyer NULL?(pas de when)???
         verify(userRepository, times(1)).save(user);
     }
 }
 
-/*@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
-public class UserServiceTest {
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
-    @Mock
-    private AppAccountRepository appAccountRepository;
-
-    @InjectMocks
-    private UserService userService;
-
-    @BeforeAll
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
-    @Test
-    public void testRegisterNewUserAccount() {
-        String firstName = "John";
-        String lastName = "Doe";
-        String email = "johndoe@example.com";
-        String password = "password";
-
-        User user = new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        user.setDeleted(false);
-
-        when(passwordEncoder.encode(password)).thenReturn("encoded_password");
-        when(userRepository.save(any(User.class))).thenReturn(user);
-
-        AppAccount account = new AppAccount();
-        account.setAccountBalance(BigDecimal.valueOf(0));
-        account.setUser(user);
-
-        when(appAccountRepository.save(any(AppAccount.class))).thenReturn(account);
-
-        User registeredUser = userService.registerNewUserAccount(firstName, lastName, email, password);
-
-        assertNotNull(registeredUser);
-        assertEquals(firstName, registeredUser.getFirstName());
-        assertEquals(lastName, registeredUser.getLastName());
-        assertEquals(email, registeredUser.getEmail());
-        assertFalse(registeredUser.isDeleted());
-        verify(userRepository, times(2)).save(user);
-        verify(passwordEncoder, times(1)).encode(password);
-        verify(appAccountRepository, times(1)).save(account);
-    }
-}
-
-    /*public class UserServiceTest {
-
-        @Mock
-        private UserRepository userRepository;
-
-        @Mock
-        private PasswordEncoder passwordEncoder;
-
-        @Mock
-        private AppAccountRepository appAccountRepository;
-
-        @InjectMocks
-        private UserService userService;
-
-        @Test
-        public void testRegisterNewUserAccount() {
-            String firstName = "John";
-            String lastName = "Doe";
-            String email = "johndoe@example.com";
-            String password = "password";
-
-            User user = new User();
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setEmail(email);
-            user.setDeleted(false);
-            when(passwordEncoder.encode(password)).thenReturn("encoded_password");
-            when(userRepository.save(any(User.class))).thenReturn(user);
-
-            AppAccount account = new AppAccount();
-            account.setAccountBalance(BigDecimal.valueOf(0));
-            account.setUser(user);
-
-            when(appAccountRepository.save(any(AppAccount.class))).thenReturn(account);
-
-            User registeredUser = userService.registerNewUserAccount(firstName, lastName, email, password);
-
-            assertNotNull(registeredUser);
-            assertEquals(firstName, registeredUser.getFirstName());
-            assertEquals(lastName, registeredUser.getLastName());
-            assertEquals(email, registeredUser.getEmail());
-            assertFalse(registeredUser.isDeleted());
-            verify(userRepository, times(2)).save(user);
-            verify(passwordEncoder, times(1)).encode(password);
-            verify(appAccountRepository, times(1)).save(account);
-        }
-    }
-
-
-
-    /*@Test
-    public void registerNewUserAccountTest(){
-        //ARRANGE
-        //if(!userRepository.existsUserByEmail("john@doe.net")){
-        //    userRepository.deleteByEmail("john@doe.net");
-        //}
-
-
-        //ACT
-        //User newUser = userService.registerNewUserAccount("john", "doe", "john@doe.net", "9876DCBE");
-       // AppAccount newAppAccount = newUser.getAppAccount();
-        //ASSERT
-       // Assertions.assertTrue(userRepository.existsUserByEmail("john@doe.net"));
-        //Assertions.assertTrue(appAccountRepository.existsAppAccountByUser(newUser));
-
-    }
-
-}*/
