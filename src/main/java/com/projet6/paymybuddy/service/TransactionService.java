@@ -60,7 +60,7 @@ public class TransactionService {
     @Transactional
     public Transaction makeANewTransaction(String emailFriend, Number amount, String description){
         logger.info("system called makeANewTransaction with parameters "+ emailFriend +" "+ amount+" "+ description+ " ");
-        System.out.println("system called makeANewTransaction with parameters "+ emailFriend +" "+ amount+" "+ description+ " ");
+        //System.out.println("system called makeANewTransaction with parameters "+ emailFriend +" "+ amount+" "+ description+ " ");
 
 
        //instanciate object transaction with listOfTransactionExceptions
@@ -72,7 +72,7 @@ public class TransactionService {
         try {
             if(emailFriend==null){
                 //if (userRepository.findByEmail(emailFriend)==null) {
-                String message = "you must enter an email address";
+                String message = "you must enter a valid email address";
                 MyException exception = new MyException(message);
                 logger.debug("user input error : input cannot be void");
                 throw exception;
@@ -170,9 +170,12 @@ public class TransactionService {
 
         AppAccount usersAccount = connectedUser.getAppAccount();
         Iterable<Integer> result = transactionRepository.getTransactionsWithMyAccountWhenDebited(usersAccount.getId());
+        System.out.println(result.toString());//correct
         for (Integer i: result){
+            //Transaction transaction = getTransactionById(i);
             Optional<Transaction> optT = getTransactionById(i);
-            Transaction transaction = optT.get();
+
+            Transaction transaction = optT.get();//no value present
             myTransactions.add(transaction);
         }
         return myTransactions;

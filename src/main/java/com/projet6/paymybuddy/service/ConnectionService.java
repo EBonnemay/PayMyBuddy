@@ -61,6 +61,7 @@ public class ConnectionService {
 
     public Iterable<Integer> getFriendsIdsForOneUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
+        System.out.println(email);
         int id = user.getId();
         return getFriendsIdsForOneUserById(id);
     }
@@ -147,8 +148,11 @@ public class ConnectionService {
 
             List<User> friends = new ArrayList();
             System.out.println("friends about to be retrived from auth");
+            System.out.println(email);
             Iterable<Integer> listOfIds = getFriendsIdsForOneUserByEmail(email);
+            System.out.println(listOfIds.toString());
             for (Integer id : listOfIds) {
+
                 Optional<User> optUser = userRepository.findById(id);
                 User user = optUser.get();
                 friends.add(user);
