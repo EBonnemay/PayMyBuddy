@@ -25,6 +25,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -112,7 +113,7 @@ public class TransactionServiceTest {
     }
 
 
-    /*@Test
+    @Test
     public void getConnectedUsersTransactionsTest(){
         //ARRANGE
         List<Integer> expectedList = new ArrayList<>();
@@ -130,11 +131,14 @@ public class TransactionServiceTest {
         transaction2.setDebitedAccount(appAccount);
         expectedList.add(8);
         expectedList.add(9);
-        //Iterable<Integer> iterablelIST = expectedList;
+        Iterable<Integer> iterablelIST = expectedList;
 
         when(userService.getCurrentUsersMailAddress()).thenReturn("johndoe@example.com");
         when(userRepository.findByEmail("johndoe@example.com")).thenReturn(user1);
         when(transactionRepository.getTransactionsWithMyAccountWhenDebited(1)).thenReturn(expectedList);
+        when(transactionRepository.findById(8)).thenReturn(Optional.of(transaction1));
+        when(transactionRepository.findById(9)).thenReturn(Optional.of(transaction2));
+
         //ajouter le getById du repo
 
          //ACT
@@ -142,10 +146,11 @@ public class TransactionServiceTest {
 
         //ASSERT
         assertTrue(myEffectiveTransactions.size()==2);
-        assertTrue(myEffectiveTransactions.get(1).getTransactionId()==8);
-        assertTrue(myEffectiveTransactions.get(2).getTransactionId()==9);
+        assertTrue(myEffectiveTransactions.contains(transaction1)); //.contains.getTransactionId()==8);
+        assertTrue(myEffectiveTransactions.contains(transaction2)); //.contains.getTransactionId()==8);
+        //assertTrue(myEffectiveTransactions.get(2).getTransactionId()==9);
 
         //assertTrue(myEffectiveTransactions.get(1).getTransactionId()==8);
-    }*/
+    }
 
 }

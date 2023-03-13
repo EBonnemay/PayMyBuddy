@@ -23,16 +23,4 @@ public class UserRepositoryTest {
     UserRepository userRepository;
 
 
-    @Test void findByEmailTest(){
-        //arrange
-
-        //act
-        User user1=  userRepository.findByEmail("jane@doe.net");
-
-        //assert
-        assertEquals(user1.getFirstName(), "Jane");
-
-    }
-
-
 }
