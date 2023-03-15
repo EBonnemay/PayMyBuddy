@@ -4,5 +4,5 @@
 
 
 # sql scripts
-[](src/main/resources/paymybuddy_scripts_sql.sql)
+[src/main/resources/paymybuddy_scripts_sql.sql]()
 
