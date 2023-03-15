@@ -64,7 +64,7 @@ public class AppAccountService {
 
     }
 
-    public void addMoneyFromConnectedAccount(String currency_field_add){
+    public void addMoneyOnConnectedAccount(String currency_field_add){
         String email = userService.getCurrentUsersMailAddress();
         User connectedUser = userRepository.findByEmail(email);
         AppAccount appAccount = connectedUser.getAppAccount();

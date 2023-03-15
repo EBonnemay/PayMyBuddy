@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Controller
+/*@Controller
 public class LoginController {
 
     @Autowired
@@ -111,21 +111,6 @@ public class LoginController {
         connectionService.deleteConnection(email);
         return "redirect:/personalPage";
     }
-    /*
-    @GetMapping("/newTransaction")
-    /*public String newTransaction(@RequestParam("id") String id, Model model){
-        //User friend = userService.getUserById(Integer.parseInt(id));
-
-        //return "transactions";
-    public String newTransaction(Model model){
-        model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
-
-        model.addAttribute("mytransactions", transactionService.getConnectedUsersTransactions());
-        return "transactions";
-
-    }*/
-
-
 
     @GetMapping("/transactions")
 
@@ -142,16 +127,6 @@ public String displayTransactionPage(Model model) {
          }
      }
     model.addAttribute("myFriends", listOfNonDeletedFriends);
-
-        //cet appel n'affiche pas les amis en première intention//
-    /* model.addAttribute("myFriends ", connectionService.getNonDeletedFriendsUsersOfConnectedUser());
-        for (User user : connectionService.getNonDeletedFriendsUsersOfConnectedUser()){
-            System.out.println(user.getFirstName());
-        }*/
-     //model.addAttribute("lastTransaction", )
-        //List <MyException> list = new ArrayList<>();
-   // model.addAttribute("transactionError", list);
-
     return "transactions";
 }
 
@@ -230,26 +205,5 @@ public String displayTransactionPage(Model model) {
             return "/transactions";
     }
 
-
-
-    /*  @GetMapping("/transactionsWithErrors")
-    public String newTransactionWithErrors(@RequestParam(defaultValue = "0") int page, Model model) {
-        //ici ajouter un paramètre booléen pour signaler si erreur +
-        int pageSize = 7; // number of transactions to display per page
-        List<Transaction> transactions = transactionService.getConnectedUsersTransactions();
-
-        int totalPages = (int) Math.ceil((double) transactions.size() / pageSize);
-        int start = page * pageSize;
-        int end = Math.min(start + pageSize, transactions.size());
-
-        List<Transaction> pageTransactions = transactions.subList(start, end);
-        model.addAttribute("transactionError", "Invalid amount, only digits and one point");
-
-
-        model.addAttribute("myFriends", connectionService.getFriendsUsersOfConnectedUser());
-        //model.addAttribute("transactionError", "Transaction amount cannot be negative.");
-
-        return "/transaction";
-    }*/
-}
+}*/
 

@@ -129,7 +129,7 @@ public class AppAccountServiceTest {
         when(userRepository.findByEmail("johndoe@example.com")).thenReturn(user);
 
         //ACT
-        appAccountService.addMoneyFromConnectedAccount("10");
+        appAccountService.addMoneyOnConnectedAccount("10");
 
         //ASSERT
         assertEquals(BigDecimal.valueOf(133), user.getAppAccount().getAccountBalance() );
