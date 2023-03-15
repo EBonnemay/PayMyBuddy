@@ -100,12 +100,12 @@ public class TransactionServiceTest {
         User user1 = new User();
         user1.setEmail("johndoe@example.com");
         AppAccount appAccount = new AppAccount();
-        appAccount.setAccountBalance(BigDecimal.valueOf(1));
+        appAccount.setAccountBalance(BigDecimal.valueOf(10));
         user1.setAppAccount(appAccount);
         when(userService.getCurrentUsersMailAddress()).thenReturn("johndoe@example.com");
         when(userRepository.findByEmail("johndoe@example.com")).thenReturn(user1);
 
-        Transaction transaction = transactionService.makeANewTransaction("johndoe@example.com", 5, "juice");
+        Transaction transaction = transactionService.makeANewTransaction("johndoe@example.com", 10, "juice");
 
         assertFalse(transaction.getExceptions().isEmpty());
         assertTrue(transaction.getExceptions().get(0).getMessage().equals("your account is not provisioned for this operation"));

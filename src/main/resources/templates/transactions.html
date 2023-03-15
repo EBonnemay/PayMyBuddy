@@ -36,8 +36,9 @@
     .pagination-bar .divider {
       margin: 0 5px;
     }
-    .error{
+    .errors{
     color:red;
+    font-size:13px;
     }
 
     </style>
@@ -121,16 +122,12 @@
                                             th:text="${user.email}">
                                 </option>
                             </select>
-                                <div th:if="${not #lists.isEmpty(transactionError)}">
-                                    <ul>
-                                        <li th:each="error : ${transactionError}" th:text="${error.message}"></li>
-                                    </ul>
-                                </div>
+
                         </div>
                         <div class = "mx-2" >
                             <input type="number" step="0.01" id="amount" name="amount" path="amount" placeholder="Enter Amount"/>
-                            <div th:if="${not #lists.isEmpty(transactionError)}">
-                                <ul>
+                            <div class="errors" th:if="${not #lists.isEmpty(transactionError)}">
+                                <ul style="list-style: none;">
                                     <li th:each="error : ${transactionError}" th:text="${error.message}"></li>
                                 </ul>
                             </div>

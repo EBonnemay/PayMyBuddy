@@ -130,7 +130,7 @@ public class TransactionService {
             AppAccount fromAppAccount = connectedUser.getAppAccount();
 
 
-            if (bdAmount.compareTo(fromAppAccount.getAccountBalance())==1){
+            if (bdAmount.add(costOfThisTransaction).compareTo(fromAppAccount.getAccountBalance())==1){
                 String message = "your account is not provisioned for this operation";
                 MyException exception = new MyException(message);
                 logger.debug("user input error : account not provisioned for this operation");
