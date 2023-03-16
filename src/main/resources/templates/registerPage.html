@@ -38,12 +38,21 @@
                 <div class="row py-2">
                     <input type="password" id="password" name="password"placeholder="password" style="width: 200px; height: 40px; margin: 2px;" /> <br />
                 </div>
-
+                <!--<div th:if="${param.error}">
+                    <p class="errors">Incorrect input</p>
+                </div>-->
+                <div th:if="${error}">
+                    <p th:text="${error}" class="errors"></p>
+                </div>
                 <div class="row pt-2">
                     <input type="submit" value="register" style="width: 200px; height: 40px; margin: 2px;" />
                 </div >
 
-
+               <!-- <div class="errors" th:if="${not #lists.isEmpty(userError)}">
+                    <ul style="list-style: none;">
+                        <li th:each="error : ${transactionError}" th:text="${error.message}"></li>
+                    </ul>
+                </div>-->
 
             </form>
 

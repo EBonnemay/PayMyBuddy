@@ -152,5 +152,8 @@ private List<Connection> connectionsAsAuthor = new ArrayList<>();
     )
     private List<Connection> connectionsAsTarget = new ArrayList<>();
 
+    @Transient
+    List<MyException> exceptions;
+
     //private String firstLastName = firstName + lastName;
 }

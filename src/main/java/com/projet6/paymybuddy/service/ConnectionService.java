@@ -89,8 +89,8 @@ public class ConnectionService {
         User author = userRepository.findByEmail(email);
         //si le mail ne se trouve pas dans la base ou input nul
         try {
-            if (userRepository.findByEmail(friendEmail)==null) {
-                String message = "you must enter an email address";
+            if (userRepository.findByEmail(friendEmail)==null||friendEmail.equals(email)) {
+                String message = "you must enter a valid email address";
                 MyException exception = new MyException(message);
                 logger.debug("user input error : input cannot be void");
                 throw exception;

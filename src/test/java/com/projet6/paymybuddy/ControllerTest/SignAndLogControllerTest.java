@@ -17,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.ui.ConcurrentModel;
+import org.springframework.ui.Model;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -55,12 +57,14 @@ public class SignAndLogControllerTest {
     @Test
     public void registerUserTest(){
         User user = new User();
+
+        Model model = new ConcurrentModel();
         when(userService.registerNewUserAccount("John", "Doe", "jdoe@example.com", "jdoe")).thenReturn(user);
 
 
         //ACT
 
-        Assertions.assertEquals("login", signAndLogController.registerUser("John", "Doe", "jdoe@example.com", "jdoe"));
+        Assertions.assertEquals("login", signAndLogController.registerUser("John", "Doe", "jdoe@example.com", "jdoe", model));
     }
     @Test
     public void displayLoginPageFromLogoutTest(){

@@ -115,6 +115,7 @@ public class ConnectionServiceTest {
         user2.setEmail("janedoe@example.com");
 
         user2.setPassword("wxc0??");
+        //user2.setDeleted(true);
         Connection expectedConnection = new Connection();
         expectedConnection.setAuthor(user1);
         expectedConnection.setTarget(user2);
@@ -136,8 +137,88 @@ public class ConnectionServiceTest {
         verify(userRepository, times(3)).findByEmail(any(String.class));
         assertEquals(expectedConnection, foundConnection);
     }
-
     @Test
+    public void saveNewConnectionForCurrentUserWithUserDeletedTest(){
+        User user1 = new User();
+        user1.setId(1);
+        user1.setFirstName("John");
+        user1.setLastName("Doe");
+        user1.setEmail("johndoe@example.com");
+
+        user1.setPassword("AZERT11!");
+
+        User user2 = new User();
+        user2.setId(2);
+        user2.setFirstName("Jane");
+        user2.setLastName("Doe");
+        user2.setEmail("janedoe@example.com");
+
+        user2.setPassword("wxc0??");
+        user2.setDeleted(true);
+        Connection expectedConnection = new Connection();
+        expectedConnection.setAuthor(user1);
+        expectedConnection.setTarget(user2);
+
+
+
+
+        when(userService.getCurrentUsersMailAddress()).thenReturn("johndoe@example.com");
+        when(userRepository.findByEmail("johndoe@example.com")).thenReturn(user1);
+
+
+        when(userRepository.findByEmail("janedoe@example.com")).thenReturn(user2);
+        when (connectionRepository.save(any(Connection.class))).thenReturn(expectedConnection);
+
+
+        //ACT
+        Connection foundConnection = connectionService.saveNewConnectionForCurrentUserWithEmailParameter("janedoe@example.com");
+        //ASSERT
+        verify(userRepository, times(3)).findByEmail(any(String.class));
+        assertEquals(null, foundConnection.getTarget());
+        assertEquals(null, foundConnection.getAuthor());
+
+    }
+    @Test
+    public void saveNewConnectionForCurrentUserWithNullFriendTest() {
+
+        User user1 = new User();
+        user1.setId(1);
+        user1.setFirstName("John");
+        user1.setLastName("Doe");
+        user1.setEmail("johndoe@example.com");
+
+        user1.setPassword("AZERT11!");
+
+        User user2 = new User();
+        user2.setId(2);
+        user2.setFirstName("Jane");
+        user2.setLastName("Doe");
+        user2.setEmail("janedoe@example.com");
+
+        user2.setPassword("wxc0??");
+        user2.setDeleted(true);
+        Connection expectedConnection = new Connection();
+        expectedConnection.setAuthor(user1);
+        expectedConnection.setTarget(user2);
+
+
+        when(userService.getCurrentUsersMailAddress()).thenReturn("johndoe@example.com");
+        when(userRepository.findByEmail("johndoe@example.com")).thenReturn(user1);
+
+
+        when(userRepository.findByEmail("janedoe@example.com")).thenReturn(null);
+        when(connectionRepository.save(any(Connection.class))).thenReturn(expectedConnection);
+
+
+        //ACT
+        Connection foundConnection = connectionService.saveNewConnectionForCurrentUserWithEmailParameter("janedoe@example.com");
+        //ASSERT
+        verify(userRepository, times(2)).findByEmail(any(String.class));
+        assertEquals(null, foundConnection.getTarget());
+        assertEquals(null, foundConnection.getAuthor());
+    }
+
+        @Test
     public void getActualOrFormerFriendsUsersOfConnectedUserTest(){
         List<Integer> expectedListOfIds = new ArrayList<>();
         expectedListOfIds.add(2);

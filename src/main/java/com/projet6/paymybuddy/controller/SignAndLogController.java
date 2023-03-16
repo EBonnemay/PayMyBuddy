@@ -1,9 +1,6 @@
 package com.projet6.paymybuddy.controller;
 
-import com.projet6.paymybuddy.model.AppAccount;
-import com.projet6.paymybuddy.model.Connection;
-import com.projet6.paymybuddy.model.Transaction;
-import com.projet6.paymybuddy.model.User;
+import com.projet6.paymybuddy.model.*;
 import com.projet6.paymybuddy.repository.AppAccountRepository;
 import com.projet6.paymybuddy.repository.UserRepository;
 import com.projet6.paymybuddy.service.AppAccountService;
@@ -48,11 +45,22 @@ public class SignAndLogController {
 
     @GetMapping("/registrationPage")
     public String displayRegisterPage() {
+
         return "registerPage";
     }
     @PostMapping("/registerNewUser")
-    public String registerUser(@RequestParam("first_name") String firstName, @RequestParam("last_name")String lastName, @RequestParam("email") String email, @RequestParam("password") String password){
+    //public String registerUser(@RequestParam("first_name") String firstName, @RequestParam("last_name")String lastName, @RequestParam("email") String email, @RequestParam("password") String password, Model model){
+    public String registerUser(@RequestParam(name="first_name", required=false) String firstName, @RequestParam (name="last_name", required=false) String lastName, @RequestParam(name="email", required=false)String email, @RequestParam(name="password", required=false) String password, Model model){
         User newUser = userService.registerNewUserAccount(firstName, lastName, email, password);
+        //List<MyException> listOfExceptions = new ArrayList<>();
+        //List<MyException> listOfExceptions = newUser.getExceptions();
+        //newUser.setExceptions(listOfExceptions);
+        // model.addAttribute("userError", newUser.getExceptions());
+        if(newUser.getExceptions()!=null){
+            model.addAttribute("error", "Incorrect input");
+            return("registerPage");
+        }
+
         return "login";
     }
 

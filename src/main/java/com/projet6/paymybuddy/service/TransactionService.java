@@ -70,7 +70,7 @@ public class TransactionService {
 
 
         try {
-            if(emailFriend==null){
+            if(emailFriend==null||emailFriend.length()==0){
                 //if (userRepository.findByEmail(emailFriend)==null) {
                 String message = "you must enter a valid email address";
                 MyException exception = new MyException(message);
@@ -84,7 +84,8 @@ public class TransactionService {
 
         }
         try{
-            if(description==null){
+            if(description==null||description.length()==0){
+                System.out.println("hello");
                 String message = "you must enter a description";
                 MyException exception = new MyException(message);
                 logger.debug("user input error : description cannot be void");

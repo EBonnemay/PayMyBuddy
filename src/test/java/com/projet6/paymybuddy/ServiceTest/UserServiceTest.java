@@ -133,6 +133,39 @@ public class UserServiceTest {
         verify(appAccountRepository, times(1)).save(any(AppAccount.class));
     }
     @Test
+    public void failedRegisterNewUserTest(){
+        String firstName = "";
+        String lastName = "Doe";
+        String email = "johndoe@example.com";
+        String password = "password";
+
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setDeleted(false);
+        when(passwordEncoder.encode(password)).thenReturn("encoded_password");
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        AppAccount account = new AppAccount();
+        account.setAccountBalance(BigDecimal.valueOf(0));
+        account.setUser(user);
+
+        //when(appAccountRepository.save(any(AppAccount.class))).thenReturn(account);
+
+        User registeredUser = userService.registerNewUserAccount(firstName, lastName, email, password);
+
+
+
+        assertEquals(null, registeredUser.getFirstName());
+        assertEquals(null, registeredUser.getLastName());
+        assertEquals(null, registeredUser.getEmail());
+        assertFalse(registeredUser.getExceptions().isEmpty());
+       verify(userRepository, times(0)).save(registeredUser);
+        verify(passwordEncoder, times(0)).encode(password);
+       verify(appAccountRepository, times(0)).save(any(AppAccount.class));
+    }
+    @Test
     public void markUserAsDeletedTest(){
         //ARRANGE
         User user = new User();

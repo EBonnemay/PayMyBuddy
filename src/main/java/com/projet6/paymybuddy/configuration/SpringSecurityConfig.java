@@ -87,7 +87,6 @@ public class SpringSecurityConfig  {
         DaoAuthenticationProvider provider  = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailService);
         provider.setPasswordEncoder(getPasswordEncoder());
-        System.out.println("security provider is about to return");
         return provider;
     }
 }

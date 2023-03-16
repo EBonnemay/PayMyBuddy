@@ -15,12 +15,10 @@ public class PaymybuddyApplication implements CommandLineRunner {
 	
 
 	public static void main(String[] args) {
-		System.out.println("main called");
 		SpringApplication.run(PaymybuddyApplication.class, args);
 	}
 	@Override
 	public void run(String...args) throws Exception{
-		System.out.println("run called");
 
 
 	}

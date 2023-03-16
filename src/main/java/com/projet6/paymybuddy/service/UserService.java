@@ -1,10 +1,13 @@
 package com.projet6.paymybuddy.service;
 
 import com.projet6.paymybuddy.model.AppAccount;
+import com.projet6.paymybuddy.model.MyException;
 import com.projet6.paymybuddy.model.User;
 import com.projet6.paymybuddy.repository.AppAccountRepository;
 import com.projet6.paymybuddy.repository.UserRepository;
 import lombok.Data;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,13 +15,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
 public class UserService {
-
+    static final Logger logger = LogManager.getLogger();
     private UserRepository userRepository;
     private AppAccountRepository appAccountRepository;
 
@@ -58,8 +62,22 @@ public String getCurrentUsersMailAddress(){
 
     //@Override
     public User registerNewUserAccount(String firstName, String lastName, String email, String password ) {
-
+        List<MyException>listOfUserExceptions = new ArrayList<>();
         User user = new User();
+        try {
+            if(firstName.length()==0||lastName.length()==0||email.length()==0||password.length()==0){
+
+                String message = "input error";
+                MyException exception = new MyException(message);
+                logger.debug("user input error : input cannot be void");
+                throw exception;
+            }
+        }catch(MyException missingInput){
+            listOfUserExceptions.add(missingInput);
+            user.setExceptions(listOfUserExceptions);
+            return user;
+
+        }
 
         user.setFirstName(firstName);
 
