@@ -1,18 +1,16 @@
 package com.projet6.paymybuddy.ServiceTest;
 
-import com.jsoniter.spi.JsonException;
+
 import com.projet6.paymybuddy.model.AppAccount;
-import com.projet6.paymybuddy.model.MyException;
+
 import com.projet6.paymybuddy.model.Transaction;
 import com.projet6.paymybuddy.model.User;
 import com.projet6.paymybuddy.repository.AppAccountRepository;
 import com.projet6.paymybuddy.repository.ConnectionRepository;
 import com.projet6.paymybuddy.repository.TransactionRepository;
 import com.projet6.paymybuddy.repository.UserRepository;
-import com.projet6.paymybuddy.service.ConnectionService;
 import com.projet6.paymybuddy.service.TransactionService;
 import com.projet6.paymybuddy.service.UserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -27,10 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -66,7 +62,7 @@ public class TransactionServiceTest {
         Transaction transaction = transactionService.makeANewTransaction(null,12, "cafe");
         //Assertions.assertThrows(MyException.class, ()-> transactionService.makeANewTransaction(null,12, "cafe"));
         assertFalse(transaction.getExceptions().isEmpty());
-        assertTrue(transaction.getExceptions().get(0).getMessage().equals("you must enter a valid email address"));
+        assertEquals("you must enter a valid email address", transaction.getExceptions().get(0).getMessage());
     }
 
     @Test
@@ -74,27 +70,23 @@ public class TransactionServiceTest {
         Transaction transaction = transactionService.makeANewTransaction("janedoe@example.com", 13, null);
 
         assertFalse(transaction.getExceptions().isEmpty());
-        assertTrue(transaction.getExceptions().get(0).getMessage().equals("you must enter a description"));
+        assertEquals("you must enter a description", transaction.getExceptions().get(0).getMessage());
 
     }
     @Test
     public void makeANewTransactionCaseFailAmountInputNullTest(){
         Transaction transaction = transactionService.makeANewTransaction("janedoe@example.com", null, "cafe");
         assertFalse(transaction.getExceptions().isEmpty());
-        assertTrue(transaction.getExceptions().get(0).getMessage().equals("invalid amount"));
+        assertEquals("invalid amount", transaction.getExceptions().get(0).getMessage());
 
     }
     @Test
     public void makeANewTransactionCaseFailAmountInputNegativeTest(){
         Transaction transaction = transactionService.makeANewTransaction("janedoe@example.com", -13, "cafe");
         assertFalse(transaction.getExceptions().isEmpty());
-        assertTrue(transaction.getExceptions().get(0).getMessage().equals("amount cannot be negative"));
+        assertEquals("amount cannot be negative", transaction.getExceptions().get(0).getMessage());
 
     }
-    /*@Test
-    public void makeANewTransactionCaseFailAmountInvalidSyntaxInputTest(){
-        transactionService.makeANewTransaction("janedoe@example.com", Number.valueOf(13,50), null);
-    }*/
     @Test
     public void makeANewTransactionCaseFailAmountAccountNotProvisionedTest(){
         User user1 = new User();
@@ -108,7 +100,7 @@ public class TransactionServiceTest {
         Transaction transaction = transactionService.makeANewTransaction("johndoe@example.com", 10, "juice");
 
         assertFalse(transaction.getExceptions().isEmpty());
-        assertTrue(transaction.getExceptions().get(0).getMessage().equals("your account is not provisioned for this operation"));
+        assertEquals("your account is not provisioned for this operation", transaction.getExceptions().get(0).getMessage());
 
     }
 
@@ -131,7 +123,7 @@ public class TransactionServiceTest {
         transaction2.setDebitedAccount(appAccount);
         expectedList.add(8);
         expectedList.add(9);
-        Iterable<Integer> iterablelIST = expectedList;
+        Iterable<Integer> iterablelist = expectedList;
 
         when(userService.getCurrentUsersMailAddress()).thenReturn("johndoe@example.com");
         when(userRepository.findByEmail("johndoe@example.com")).thenReturn(user1);
@@ -139,18 +131,14 @@ public class TransactionServiceTest {
         when(transactionRepository.findById(8)).thenReturn(Optional.of(transaction1));
         when(transactionRepository.findById(9)).thenReturn(Optional.of(transaction2));
 
-        //ajouter le getById du repo
-
          //ACT
         List<Transaction> myEffectiveTransactions = transactionService.getConnectedUsersTransactions();
 
         //ASSERT
-        assertTrue(myEffectiveTransactions.size()==2);
+        assertEquals(2, myEffectiveTransactions.size());
         assertTrue(myEffectiveTransactions.contains(transaction1)); //.contains.getTransactionId()==8);
         assertTrue(myEffectiveTransactions.contains(transaction2)); //.contains.getTransactionId()==8);
-        //assertTrue(myEffectiveTransactions.get(2).getTransactionId()==9);
 
-        //assertTrue(myEffectiveTransactions.get(1).getTransactionId()==8);
     }
 
 }

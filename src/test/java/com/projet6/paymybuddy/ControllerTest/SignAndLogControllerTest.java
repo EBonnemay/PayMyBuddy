@@ -1,11 +1,11 @@
 package com.projet6.paymybuddy.ControllerTest;
 
 import com.projet6.paymybuddy.controller.SignAndLogController;
-import com.projet6.paymybuddy.controller.TransferController;
+
 import com.projet6.paymybuddy.model.User;
-import com.projet6.paymybuddy.repository.AppAccountRepository;
+
 import com.projet6.paymybuddy.repository.UserRepository;
-import com.projet6.paymybuddy.service.AppAccountService;
+
 import com.projet6.paymybuddy.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,13 +14,11 @@ import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
-
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 

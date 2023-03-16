@@ -13,18 +13,16 @@ import com.projet6.paymybuddy.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.InjectMocks;
+
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -254,7 +252,7 @@ public class UserControllerTest {
     public void emptyMyAppAccountAndRedirectPersonalPageTest(){
 
         doNothing().when(appAccountService).setConnectedAccountToZero();
-        String view = userController.emptyMyAppAccountAndRedirectPersonalPage("1");
+        String view = userController.emptyMyAppAccountAndRedirectPersonalPage();
         verify(appAccountService, times(1)).setConnectedAccountToZero();
         assertEquals("redirect:/personalPage", view);
     }

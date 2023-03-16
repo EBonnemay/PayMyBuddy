@@ -5,15 +5,12 @@ import com.projet6.paymybuddy.model.MyException;
 import com.projet6.paymybuddy.model.User;
 import com.projet6.paymybuddy.repository.AppAccountRepository;
 import com.projet6.paymybuddy.repository.UserRepository;
-import lombok.Data;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +66,7 @@ public String getCurrentUsersMailAddress(){
 
                 String message = "input error";
                 MyException exception = new MyException(message);
-                logger.debug("user input error : input cannot be void");
+                logger.error("user input error : input cannot be void");
                 throw exception;
             }
         }catch(MyException missingInput){

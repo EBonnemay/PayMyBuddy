@@ -6,18 +6,13 @@ import com.projet6.paymybuddy.repository.AppAccountRepository;
 import com.projet6.paymybuddy.repository.UserRepository;
 import com.projet6.paymybuddy.service.UserService;
 import org.junit.jupiter.api.*;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
-
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -38,8 +33,6 @@ public class UserServiceTest {
     private AppAccountRepository appAccountRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
-    //@Mock
-    //private SecurityContextHolder securityContextHolder;
     @Mock
     private Authentication auth;
 
@@ -156,10 +149,9 @@ public class UserServiceTest {
         User registeredUser = userService.registerNewUserAccount(firstName, lastName, email, password);
 
 
-
-        assertEquals(null, registeredUser.getFirstName());
-        assertEquals(null, registeredUser.getLastName());
-        assertEquals(null, registeredUser.getEmail());
+        assertNull(registeredUser.getFirstName());
+        assertNull(registeredUser.getLastName());
+        assertNull(registeredUser.getEmail());
         assertFalse(registeredUser.getExceptions().isEmpty());
        verify(userRepository, times(0)).save(registeredUser);
         verify(passwordEncoder, times(0)).encode(password);

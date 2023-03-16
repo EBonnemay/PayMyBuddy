@@ -1,13 +1,9 @@
 package com.projet6.paymybuddy.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Positive;
 import lombok.Data;
-import org.springframework.lang.NonNull;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -46,8 +42,7 @@ public class Transaction {
     )
     @JoinColumn(name = "debited_account")
     private AppAccount debitedAccount;
-    //means that my transaction entity has a foreign key column named debited_account
-    //referring to the primary k
+
     @ManyToOne(
             cascade = CascadeType.PERSIST,
             fetch = FetchType.EAGER
@@ -55,8 +50,6 @@ public class Transaction {
     @JoinColumn(name = "credited_account")
     private AppAccount creditedAccount;
 
-
-//créer un objet
 @Transient
     List<MyException> exceptions;
 

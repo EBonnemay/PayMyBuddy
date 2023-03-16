@@ -14,8 +14,5 @@ public interface TransactionRepository extends CrudRepository<Transaction, Integ
     @Query(value = "SELECT id FROM transaction WHERE credited_account = :accountId", nativeQuery = true)
     Iterable<Integer> getTransactionsWithMyAccountWhenCredited(@Param("accountId") int accountId);
 
-    /*@Query (value = "SELECT id FROM transaction WHERE debited_account = :accountId UNION ALL SELECT id FROM connection WHERE credited_account = :accountId")
-    Iterable<Integer> getTransactionsWithMyAccountWhenDebitedOrCredited(@Param("accountId") int accountId);
-*/
 }
 

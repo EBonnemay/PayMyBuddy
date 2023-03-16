@@ -20,8 +20,7 @@ public class MyUserDetailsService implements UserDetailsService {
         if (user == null||user.isDeleted()) {
             throw new UsernameNotFoundException("user not found");
         }
-        //UserDetails userD = new UserPrincipal(user);
-        //return userD;
+
         return new UserPrincipal(user);
     }
 }

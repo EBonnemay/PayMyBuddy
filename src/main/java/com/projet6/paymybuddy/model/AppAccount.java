@@ -23,20 +23,7 @@ public class AppAccount {
         @Column(name = "account_balance")
         private BigDecimal accountBalance;
 
-       /* @ManyToMany(cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-        },
-                fetch = FetchType.EAGER
-        )
-        //
-        @JoinTable(
-                name = "transaction",
-                joinColumns = @JoinColumn(name = "credited_account", referencedColumnName = "id"),
-                inverseJoinColumns = @JoinColumn(name = "debited_account", referencedColumnName = "id")
-        )
-        private List<BankAccount> bankAccountsOfFriendsGivingMoneyToMe = new ArrayList<>();
-*/
+       
         @OneToMany(
                 fetch = FetchType.EAGER,
                 mappedBy = "debitedAccount",
@@ -53,19 +40,7 @@ public class AppAccount {
             orphanRemoval = true
     )
     private List<Transaction> transactionsAsCreditedAccount = new ArrayList<>();//pas de clé étrangère ici? la "user_id" mentionnée dans USER avec @join column + liste de bankAccounts
-       /* @ManyToMany(cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-        },
-                fetch = FetchType.EAGER
-        )
-        @JoinTable(
-                name = "transaction",
-                joinColumns = @JoinColumn(name = "debited_account", referencedColumnName = "id"),
-                inverseJoinColumns = @JoinColumn(name = "credited_account", referencedColumnName = "id")
-        )
-        private List<BankAccount> bankAccountsOfFriendsIGaveMoneyTo = new ArrayList<>();
-*/
+
         @OneToOne(
                 //tentative ?? pour créer une entité
                 //cascade = CascadeType.ALL,//(ou PERSIST)
@@ -78,5 +53,3 @@ public class AppAccount {
 
 
 }
-//means that my bankAccount entity has a foreign key column named user_id_email referring
-//to the primary attribute id_email of my User Entity

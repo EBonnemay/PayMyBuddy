@@ -1,23 +1,18 @@
 package com.projet6.paymybuddy.ServiceTest;
 
-import com.jsoniter.any.Any;
+
 import com.projet6.paymybuddy.model.Connection;
 import com.projet6.paymybuddy.model.User;
 import com.projet6.paymybuddy.repository.ConnectionRepository;
 import com.projet6.paymybuddy.repository.UserRepository;
 import com.projet6.paymybuddy.service.ConnectionService;
 import com.projet6.paymybuddy.service.UserService;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.context.TestPropertySource;
@@ -174,8 +169,8 @@ public class ConnectionServiceTest {
         Connection foundConnection = connectionService.saveNewConnectionForCurrentUserWithEmailParameter("janedoe@example.com");
         //ASSERT
         verify(userRepository, times(3)).findByEmail(any(String.class));
-        assertEquals(null, foundConnection.getTarget());
-        assertEquals(null, foundConnection.getAuthor());
+        assertNull(foundConnection.getTarget());
+        assertNull(foundConnection.getAuthor());
 
     }
     @Test
@@ -214,8 +209,8 @@ public class ConnectionServiceTest {
         Connection foundConnection = connectionService.saveNewConnectionForCurrentUserWithEmailParameter("janedoe@example.com");
         //ASSERT
         verify(userRepository, times(2)).findByEmail(any(String.class));
-        assertEquals(null, foundConnection.getTarget());
-        assertEquals(null, foundConnection.getAuthor());
+        assertNull(foundConnection.getTarget());
+        assertNull(foundConnection.getAuthor());
     }
 
         @Test

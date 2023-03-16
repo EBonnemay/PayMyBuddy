@@ -1,18 +1,14 @@
 package com.projet6.paymybuddy.controller;
 
-import com.projet6.paymybuddy.model.AppAccount;
-import com.projet6.paymybuddy.model.Connection;
 import com.projet6.paymybuddy.model.Transaction;
 import com.projet6.paymybuddy.model.User;
-import com.projet6.paymybuddy.repository.AppAccountRepository;
-import com.projet6.paymybuddy.repository.UserRepository;
+
 import com.projet6.paymybuddy.service.AppAccountService;
 import com.projet6.paymybuddy.service.ConnectionService;
 import com.projet6.paymybuddy.service.TransactionService;
 import com.projet6.paymybuddy.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,17 +20,7 @@ import java.util.List;
 
 @Controller
 public class TransferController {
-    /*
-    @Autowired
-    ConnectionService connectionService;
-    @Autowired
-    UserService userService;
 
-    @Autowired
-    AppAccountService appAccountService;
-    @Autowired
-    TransactionService transactionService;
-    //transformer le get personal Page en post??,*/
 
     static final Logger logger = LogManager.getLogger();
     //@Autowired
@@ -79,6 +65,7 @@ public String displayTransactionPage(Model model) {
 
             model.addAttribute("transactionError", transaction.getExceptions());
             if(transaction.getExceptions()!=null){
+                logger.error("errors in transaction MyExceptions list");
                 for(Exception exception : transaction.getExceptions()){
                     String message = exception.getMessage();
                 }
