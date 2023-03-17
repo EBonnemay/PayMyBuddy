@@ -127,7 +127,7 @@ public class TransactionServiceTest {
 
         when(userService.getCurrentUsersMailAddress()).thenReturn("johndoe@example.com");
         when(userRepository.findByEmail("johndoe@example.com")).thenReturn(user1);
-        when(transactionRepository.getTransactionsWithMyAccountWhenDebited(1)).thenReturn(expectedList);
+        when(transactionRepository.getTransactionsIdsWithMyAccountWhenDebitedOrCredited(1)).thenReturn(expectedList);
         when(transactionRepository.findById(8)).thenReturn(Optional.of(transaction1));
         when(transactionRepository.findById(9)).thenReturn(Optional.of(transaction2));
 

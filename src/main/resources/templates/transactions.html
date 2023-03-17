@@ -151,10 +151,12 @@
 
 
     <row>
+        <!--table modifiée après soutenance-->
         <table id = "transaction_table" class="table table-striped">
             <thead class="table-success text-white">
                 <tr>
-                    <th>Buddy's name</th>
+                    <th>Giver buddy</th>
+                    <th>Recipient buddy</th>
                     <th>Description</th>
                     <th>Transaction amount</th>
                     <th>Transaction fee</th>
@@ -164,6 +166,7 @@
             <tbody>
                 <th:block th:each="transaction : ${myTransactions}">
                     <tr>
+                        <td th:text="${transaction.debitedAccount.user.firstName}"></td>
                         <td th:text="${transaction.creditedAccount.user.firstName}"></td>
                         <td th:text="${transaction.description}"></td>
                         <td th:text="${transaction.amountOfTransaction}"></td>

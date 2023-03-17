@@ -163,7 +163,7 @@ public class TransactionService {
         User connectedUser = userRepository.findByEmail(email);
 
         AppAccount usersAccount = connectedUser.getAppAccount();
-        Iterable<Integer> result = transactionRepository.getTransactionsWithMyAccountWhenDebited(usersAccount.getId());
+        Iterable<Integer> result = transactionRepository.getTransactionsIdsWithMyAccountWhenDebitedOrCredited(usersAccount.getId());
         for (Integer i: result){
             Optional<Transaction> optT = getTransactionById(i);
 
