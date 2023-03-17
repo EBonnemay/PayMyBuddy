@@ -62,11 +62,11 @@ public String getCurrentUsersMailAddress(){
         List<MyException>listOfUserExceptions = new ArrayList<>();
         User user = new User();
         try {
-            if(firstName.length()==0||lastName.length()==0||email.length()==0||password.length()==0){
+            if(firstName.length()==0||lastName.length()==0||email.length()==0||password.length()==0|| userRepository.existsUserByEmail(email)){
 
                 String message = "input error";
                 MyException exception = new MyException(message);
-                logger.error("user input error : input cannot be void");
+                logger.error("user input error on register");
                 throw exception;
             }
         }catch(MyException missingInput){
@@ -76,11 +76,12 @@ public String getCurrentUsersMailAddress(){
 
         }
 
+        user.setEmail(email);
         user.setFirstName(firstName);
 
         user.setLastName(lastName);
        user.setPassword(passwordEncoder.encode(password));
-       user.setEmail(email);
+
         user.setDeleted(false);
         userRepository.save(user);
 
